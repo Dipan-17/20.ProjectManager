@@ -2,18 +2,23 @@
     <!-- Base application theme. -->
 
     <style name="Base.Theme.Project_Manager" parent="Theme.Material3.Light.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
 
     <style name="Theme.Project_Manager" parent="Base.Theme.Project_Manager" />
 
-
-
-
     <style name="AppTheme" parent="Base.Theme.Project_Manager"/>
-    <style name="AppTheme.NoActionBar">
+
+    <style name="AppTheme.NoActionBar" parent="AppTheme">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+    </style>
+
+    <!-- Custom Button Style -->
+    <style name="CustomButton" parent="Widget.Material3.Button">
+        <item name="android:background">@drawable/shape_button_rounded</item>
+        <item name="android:textColor">@android:color/white</item>
     </style>
 </resources>
