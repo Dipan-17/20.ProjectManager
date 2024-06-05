@@ -31,6 +31,7 @@ open class BaseActivity : AppCompatActivity() {
         mProgressDialog.findViewById<TextView>(R.id.tv_progress_text).text = text
         mProgressDialog.show()
     }
+
     fun hideProgressDialog(){
         mProgressDialog.dismiss()
     }
@@ -59,7 +60,7 @@ open class BaseActivity : AppCompatActivity() {
     }
 
 
-    fun showErrorSnack(message:String){
+    fun showErrorSnackBar(message:String){
         val snackbar= Snackbar.make(findViewById(android.R.id.content),message,Snackbar.LENGTH_LONG)
         val snackBarView=snackbar.view
         snackBarView.setBackgroundColor(ContextCompat.getColor(this,R.color.snackbar_error_color))
