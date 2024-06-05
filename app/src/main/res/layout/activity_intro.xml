@@ -77,4 +77,6 @@
         android:text="@string/sign_up"
         android:textColor="@color/colorAccent"
         android:textSize="@dimen/btn_text_size" />
+
+
 </LinearLayout>
