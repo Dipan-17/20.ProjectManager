@@ -1,10 +1,10 @@
-package dipan.ProjectManagement
+package dipan.ProjectManagement.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowManager
+import dipan.ProjectManagement.R
 import dipan.ProjectManagement.databinding.ActivitySignInBinding
-import dipan.ProjectManagement.databinding.ActivitySignUpBinding
 
 class SignInActivity : AppCompatActivity() {
 

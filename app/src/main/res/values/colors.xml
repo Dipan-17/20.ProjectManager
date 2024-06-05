@@ -9,4 +9,6 @@
 
     <color name="primaryTextColor">#363a43</color>
     <color name="secondaryTextColor">#7a8089</color>
+
+    <color name="snackbar_error_color">#f70000</color>
 </resources>

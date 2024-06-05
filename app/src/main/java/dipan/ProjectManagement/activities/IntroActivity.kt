@@ -1,11 +1,10 @@
-package dipan.ProjectManagement
+package dipan.ProjectManagement.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowManager
 import dipan.ProjectManagement.databinding.ActivityIntroBinding
-import dipan.ProjectManagement.databinding.ActivitySplashBinding
 
 class IntroActivity : AppCompatActivity() {
 
