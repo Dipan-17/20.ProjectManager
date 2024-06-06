@@ -49,7 +49,7 @@
                     android:layout_width="@dimen/my_profile_user_image_size"
                     android:layout_height="@dimen/my_profile_user_image_size"
                     android:contentDescription="@string/image_contentDescription"
-                    android:background="#c0c0c0"
+                    android:background="#0000000"
                     android:src="@drawable/ic_user_place_holder" />
 
                 <com.google.android.material.textfield.TextInputLayout

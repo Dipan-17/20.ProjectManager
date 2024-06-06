@@ -1,13 +1,10 @@
 package dipan.ProjectManagement.activities
 
-import android.content.ContentValues.TAG
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.view.WindowManager
-import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import dipan.ProjectManagement.R
 import dipan.ProjectManagement.databinding.ActivitySignInBinding
@@ -55,7 +52,7 @@ class SignInActivity : BaseActivity() {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("SIGN IN", "signInWithEmail:success")
                             val user = auth.currentUser
-                            FirestoreClass().signInUser(this)
+                            FirestoreClass().loadUserData(this)
 
                         } else {
                             // If sign in fails, display a message to the user.

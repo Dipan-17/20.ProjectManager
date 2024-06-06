@@ -6,6 +6,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import dipan.ProjectManagement.activities.MainActivity
+import dipan.ProjectManagement.activities.MyProfileActivity
 import dipan.ProjectManagement.activities.SignInActivity
 import dipan.ProjectManagement.activities.SignUpActivity
 import dipan.ProjectManagement.models.User
@@ -30,7 +31,7 @@ class FirestoreClass {
 
 
     //make the activity now general so that anyone can call
-    fun signInUser(activity: Activity){//kyuki calling activity ke instance pr  hi wapas jana hain
+    fun loadUserData(activity: Activity){//kyuki calling activity ke instance pr  hi wapas jana hain
         mFireStore.collection(Constants.USERS)//is collection -> table
             .document(getCurrentUserID())//ka ye row -> cause the rows are identified by the user id
             .get()
@@ -43,6 +44,9 @@ class FirestoreClass {
                     }
                     is MainActivity ->{
                         activity.updateNavigationUserDetails(loggedInUser)
+                    }
+                    is MyProfileActivity ->{
+                        activity.setUserDataInUI(loggedInUser)
                     }
                 }
 

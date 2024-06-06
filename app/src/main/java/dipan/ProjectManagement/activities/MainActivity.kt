@@ -1,15 +1,10 @@
 package dipan.ProjectManagement.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MenuItem
-import android.widget.Toast
-import android.widget.Toolbar
 import androidx.core.graphics.toColorInt
 import androidx.core.view.GravityCompat
 import com.bumptech.glide.Glide
-import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import dipan.ProjectManagement.R
 import dipan.ProjectManagement.databinding.ActivityMainBinding
@@ -61,7 +56,7 @@ class MainActivity : BaseActivity() {
 
 
         //set navigation drawer details
-        FirestoreClass().signInUser(this)
+        FirestoreClass().loadUserData(this)
 
     }
 
@@ -99,7 +94,7 @@ class MainActivity : BaseActivity() {
         //set the image
         Glide.with(this)
             .load(user.image)
-            .centerCrop()
+            .fitCenter()
             .placeholder(R.drawable.ic_user_place_holder)
             .into(profile!!)
 
