@@ -19,7 +19,6 @@ open class BaseActivity : AppCompatActivity() {
     //any loading shows dialog
     private lateinit var mProgressDialog: Dialog
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_base)
