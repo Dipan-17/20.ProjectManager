@@ -12,6 +12,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import dipan.ProjectManagement.R
 
+//base class to inherit common functionalities
 open class BaseActivity : AppCompatActivity() {
     //double back to exit
     private var doubleBackToExitPressedOnce=false
