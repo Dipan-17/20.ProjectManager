@@ -114,8 +114,7 @@
                     android:layout_marginTop="@dimen/sign_up_screen_btn_marginTop"
                     android:layout_marginEnd="@dimen/btn_marginStartEnd"
 
-                    style="@style/CustomButton"
-
+                    android:background="@drawable/shape_button_rounded"
 
                     android:foreground="?attr/selectableItemBackground"
                     android:gravity="center"

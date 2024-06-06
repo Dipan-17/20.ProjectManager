@@ -30,8 +30,9 @@ class Splash_Activity : AppCompatActivity() {
         //start intro activity after 2.5 seconds
         Handler().postDelayed({
 
-            var currenUserID=FirestoreClass().getCurrentUserID()
-            if(currenUserID.isNotEmpty()){
+
+            var currentUserID=FirestoreClass().getCurrentUserID()
+            if(currentUserID.isNotEmpty()){
                 //auto login
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
