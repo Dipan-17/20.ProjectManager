@@ -40,8 +40,10 @@ class FirestoreClass {
             }
     }
 
+
+
      fun getCurrentUserID(): String {
-        var currentUser = FirebaseAuth.getInstance().currentUser
+        val currentUser = FirebaseAuth.getInstance().currentUser
         //if the user is not null then get the uid of the user -> auto login
         //else return an empty string
         var currentUserID=""

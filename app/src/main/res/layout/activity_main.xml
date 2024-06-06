@@ -15,6 +15,7 @@
     <!--This is tool bar that is displayed in the main activity below the drawer-->
     <include
         layout="@layout/app_bar_main"
+        android:id="@+id/drawer_app_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
@@ -27,7 +28,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-
 
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer"
