@@ -29,7 +29,7 @@ class FirestoreClass {
     }
 
 
-    //make the acitivity now general so that anyone can call
+    //make the activity now general so that anyone can call
     fun signInUser(activity: Activity){//kyuki calling activity ke instance pr  hi wapas jana hain
         mFireStore.collection(Constants.USERS)//is collection -> table
             .document(getCurrentUserID())//ka ye row -> cause the rows are identified by the user id

@@ -39,7 +39,8 @@ class MainActivity : BaseActivity() {
         mainBinding?.navView?.setNavigationItemSelectedListener { menuItem->
             when(menuItem.itemId){
                 R.id.nav_myProfile -> {
-                    Toast.makeText(this, "My Profile", Toast.LENGTH_SHORT).show()
+                    val intent= Intent(this@MainActivity,MyProfileActivity::class.java)
+                    startActivity(intent)
                     true
                 }
                 R.id.nav_signOut -> {
