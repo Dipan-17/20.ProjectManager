@@ -11,6 +11,8 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import dipan.ProjectManagement.R
 import dipan.ProjectManagement.databinding.ActivitySignInBinding
+import dipan.ProjectManagement.firebase.FirestoreClass
+import dipan.ProjectManagement.models.User
 
 class SignInActivity : BaseActivity() {
 
@@ -38,7 +40,7 @@ class SignInActivity : BaseActivity() {
             }
         }
 
-        private fun signInRegisteredUser(){
+    private fun signInRegisteredUser(){
             val email=binding?.etEmail?.text.toString().trim{it <=' '}
             val password=binding?.etPassword?.text.toString().trim{it <=' '}
 
@@ -53,9 +55,7 @@ class SignInActivity : BaseActivity() {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("SIGN IN", "signInWithEmail:success")
                             val user = auth.currentUser
-
-                            startActivity(Intent(this, MainActivity::class.java))
-                            finish()
+                            FirestoreClass().signInUser(this)
 
                         } else {
                             // If sign in fails, display a message to the user.
@@ -94,4 +94,11 @@ class SignInActivity : BaseActivity() {
                 onBackPressedDispatcher.onBackPressed()
             }
         }
+
+    //sign in after getting data from firestore
+    fun signInSuccess(user: User){
+        hideProgressDialog()
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
+    }
 }
