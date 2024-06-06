@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.WindowManager
 import dipan.ProjectManagement.databinding.ActivitySplashBinding
+import dipan.ProjectManagement.firebase.FirestoreClass
 
 class Splash_Activity : AppCompatActivity() {
     private var binding: ActivitySplashBinding? = null
@@ -28,8 +29,19 @@ class Splash_Activity : AppCompatActivity() {
 
         //start intro activity after 2.5 seconds
         Handler().postDelayed({
-            startActivity(Intent(this, IntroActivity::class.java))
-            finish()
+
+            var currenUserID=FirestoreClass().getCurrentUserID()
+            if(currenUserID.isNotEmpty()){
+                //auto login
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
+            }
+            else{
+                startActivity(Intent(this, IntroActivity::class.java))
+                finish()
+            }
+
+
         }, 2500)
 
     }

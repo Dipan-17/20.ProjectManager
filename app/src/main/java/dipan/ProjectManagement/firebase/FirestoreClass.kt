@@ -28,8 +28,8 @@ class FirestoreClass {
 
 
     fun signInUser(activity: SignInActivity){//kyuki calling activity ke instance pr  hi wapas jana hain
-        mFireStore.collection(Constants.USERS)
-            .document(getCurrentUserID())
+        mFireStore.collection(Constants.USERS)//is collection -> table
+            .document(getCurrentUserID())//ka ye row -> cause the rows are identified by the user id
             .get()
             .addOnSuccessListener { document->
                 val loggedInUser=document.toObject(User::class.java)!! // we are creating a user object from the document we get
@@ -40,7 +40,14 @@ class FirestoreClass {
             }
     }
 
-    private fun getCurrentUserID(): String {
-        return FirebaseAuth.getInstance().currentUser!!.uid
+     fun getCurrentUserID(): String {
+        var currentUser = FirebaseAuth.getInstance().currentUser
+        //if the user is not null then get the uid of the user -> auto login
+        //else return an empty string
+        var currentUserID=""
+        if(currentUser!=null){
+            currentUserID=currentUser.uid.toString()
+        }
+        return currentUserID
     }
 }
