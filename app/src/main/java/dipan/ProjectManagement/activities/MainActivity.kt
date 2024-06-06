@@ -8,12 +8,16 @@ import android.widget.Toast
 import android.widget.Toolbar
 import androidx.core.graphics.toColorInt
 import androidx.core.view.GravityCompat
+import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import dipan.ProjectManagement.R
 import dipan.ProjectManagement.databinding.ActivityMainBinding
 import dipan.ProjectManagement.databinding.AppBarMainBinding
 import dipan.ProjectManagement.databinding.MainContentBinding
+import dipan.ProjectManagement.databinding.NavHeaderMainBinding
+import dipan.ProjectManagement.firebase.FirestoreClass
+import dipan.ProjectManagement.models.User
 
 class MainActivity : BaseActivity() {
     private var mainBinding: ActivityMainBinding? = null //the parent layout
@@ -28,7 +32,7 @@ class MainActivity : BaseActivity() {
         appBarBinding= AppBarMainBinding.bind(mainBinding?.drawerAppBar?.root!!)
         mainContentBinding= MainContentBinding.bind(mainBinding?.drawerAppBar?.mainContent?.root!!)
 
-
+        //set action bar
         setUpActionBar()
 
         //side drawer ke buttons ke on click listeners
@@ -54,6 +58,10 @@ class MainActivity : BaseActivity() {
             return@setNavigationItemSelectedListener true
         }
 
+
+        //set navigation drawer details
+        FirestoreClass().signInUser(this)
+
     }
 
     private fun setUpActionBar(){
@@ -75,6 +83,26 @@ class MainActivity : BaseActivity() {
         }else{
             mainBinding?.drawerLayout?.openDrawer(GravityCompat.START)
         }
+    }
+
+
+    fun updateNavigationUserDetails(user: User){
+        val navView=mainBinding?.navView// Get a reference to the NavigationView
+        val headerView=navView?.getHeaderView(0) // Get a reference to the header view
+        val headerBinding = headerView?.let { NavHeaderMainBinding.bind(it) }// Bind the header view
+
+        //access
+        val userName=headerBinding?.tvHeaderUserName
+        val profile=headerBinding?.ivHeaderProfile
+
+        //set the image
+        Glide.with(this)
+            .load(user.image)
+            .centerCrop()
+            .placeholder(R.drawable.ic_user_place_holder)
+            .into(profile!!)
+
+        userName?.text=user.name
     }
 
     override fun onBackPressed() {
