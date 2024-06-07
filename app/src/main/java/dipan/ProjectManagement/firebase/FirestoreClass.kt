@@ -2,6 +2,7 @@ package dipan.ProjectManagement.firebase
 
 import android.app.Activity
 import android.util.Log
+import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
@@ -67,6 +68,32 @@ class FirestoreClass {
             }
     }
 
+
+    //function to updateProfile once update pressed
+    fun updateUserProfileData(activity: MyProfileActivity,
+                              userHashMap: HashMap<String, Any>) {
+        //in fire store
+        //there is a table -> collection
+        //each user has a document -> row
+        //inside each user: there is hashmap: name, email, mobile, image
+        //there is key-value pair
+        //so we are also passing a hash map to update
+
+        mFireStore.collection(Constants.USERS)
+            .document(getCurrentUserID())
+            .update(userHashMap)
+            .addOnSuccessListener {
+                Log.e("Firebase","Profile data updated successfully")
+                //Toast.makeText(activity,"Profile updated successfully",Toast.LENGTH_SHORT).show()
+                activity.profileUpdateSuccess()
+            }
+            .addOnFailureListener { e ->
+                activity.hideProgressDialog()
+                Log.e("Firebase", "Error while updating the user details.", e)
+                Toast.makeText(activity,"Error in updating profile",Toast.LENGTH_SHORT).show()
+            }
+
+    }
 
 
      fun getCurrentUserID(): String {
