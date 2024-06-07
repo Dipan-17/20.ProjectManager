@@ -6,14 +6,17 @@ import android.os.Bundle
 import android.util.Log
 import androidx.core.graphics.toColorInt
 import androidx.core.view.GravityCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import dipan.ProjectManagement.R
+import dipan.ProjectManagement.adapters.BoardItemsAdapter
 import dipan.ProjectManagement.databinding.ActivityMainBinding
 import dipan.ProjectManagement.databinding.AppBarMainBinding
 import dipan.ProjectManagement.databinding.MainContentBinding
 import dipan.ProjectManagement.databinding.NavHeaderMainBinding
 import dipan.ProjectManagement.firebase.FirestoreClass
+import dipan.ProjectManagement.models.Board
 import dipan.ProjectManagement.models.User
 import dipan.ProjectManagement.utils.Constants
 
@@ -41,7 +44,7 @@ class MainActivity : BaseActivity() {
 
 
         //set navigation drawer details
-        FirestoreClass().loadUserData(this)
+        FirestoreClass().loadUserData(this,true)//first time we should read the boards list
 
 
         //side drawer ke buttons ke on click listeners
@@ -89,6 +92,35 @@ class MainActivity : BaseActivity() {
         }
     }
 
+
+
+    //recycler view list inside main screen
+    fun populateBoardsListToUI(boardList:ArrayList<Board>){
+        hideProgressDialog()
+
+        if(boardList.size>0){
+            //play with visibility
+            mainContentBinding?.rvBoardsList?.visibility=android.view.View.VISIBLE
+            mainContentBinding?.tvNoBoardsAvailable?.visibility=android.view.View.GONE
+
+            //assign the adapter
+            val adapter=BoardItemsAdapter(this@MainActivity,boardList)
+
+            mainContentBinding?.rvBoardsList?.setHasFixedSize(true)
+            mainContentBinding?.rvBoardsList?.layoutManager= LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
+            mainContentBinding?.rvBoardsList?.adapter= adapter
+
+
+
+        }else{
+            //visibility
+            mainContentBinding?.rvBoardsList?.visibility=android.view.View.GONE
+            mainContentBinding?.tvNoBoardsAvailable?.visibility=android.view.View.VISIBLE
+        }
+    }
+
+
+    //action bar setup
     private fun setUpActionBar(){
 
         val toolbar=appBarBinding?.toolbarMainActivity
@@ -112,7 +144,7 @@ class MainActivity : BaseActivity() {
     }
 
     //side ke drawer main details update -> called by firestore class after successfully retrieving user info
-    fun updateNavigationUserDetails(user: User){
+    fun updateNavigationUserDetails(user: User,readBoardsList:Boolean){
         val navView=mainBinding?.navView// Get a reference to the NavigationView
         val headerView=navView?.getHeaderView(0) // Get a reference to the header view
         val headerBinding = headerView?.let { NavHeaderMainBinding.bind(it) }// Bind the header view
@@ -131,6 +163,12 @@ class MainActivity : BaseActivity() {
         userName?.text=user.name
 
         mUserName=user.name
+
+        //read boards if required
+        if(readBoardsList){
+            showProgressDialog(resources.getString(R.string.please_wait))
+            FirestoreClass().getBoardsList(this)
+        }
 
     }
 

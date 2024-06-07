@@ -38,7 +38,7 @@ class FirestoreClass {
 
 
     //make the activity now general so that anyone can call
-    fun loadUserData(activity: Activity){//kyuki calling activity ke instance pr  hi wapas jana hain
+    fun loadUserData(activity: Activity,readBoardsList: Boolean=false){//kyuki calling activity ke instance pr  hi wapas jana hain
         mFireStore.collection(Constants.USERS)//is collection -> table
             .document(getCurrentUserID())//ka ye row -> cause the rows are identified by the user id
             .get()
@@ -50,7 +50,7 @@ class FirestoreClass {
                         activity.signInSuccess(loggedInUser)
                     }
                     is MainActivity ->{
-                        activity.updateNavigationUserDetails(loggedInUser)
+                        activity.updateNavigationUserDetails(loggedInUser,readBoardsList)
                     }
                     is MyProfileActivity ->{
                         activity.setUserDataInUI(loggedInUser)
@@ -136,4 +136,29 @@ class FirestoreClass {
 
     }
 
+
+    //get list of all boards
+    fun getBoardsList(activity:MainActivity){
+        mFireStore.collection(Constants.BOARDS)
+            .whereArrayContains(Constants.ASSIGNED_TO,getCurrentUserID())//check if the user is assigned to the board
+            .get()
+            .addOnSuccessListener { document ->
+                Log.e("FireStore: ","DocumentList" + document.documents.toString())
+                val boardList:ArrayList<Board> = ArrayList()
+
+                //get all boards in my list
+                for(i in document.documents){
+                    val board = i.toObject(Board::class.java)!!
+
+                    board.documentId=i.id
+                    boardList.add(board)
+                }
+                activity.populateBoardsListToUI(boardList)
+            }
+            .addOnFailureListener {
+                e->
+                activity.hideProgressDialog()
+                Log.e("FireStoreError", "Error while getting the board list", e)
+            }
+    }
 }
