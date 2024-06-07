@@ -55,11 +55,17 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth:23.0.0")
     implementation("com.google.firebase:firebase-firestore-ktx")
+    //firebase storage
+    implementation("com.google.firebase:firebase-storage-ktx")
 
     //circular image
     implementation("de.hdodenhof:circleimageview:3.1.0")
     //glide
     implementation("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
+
+    //dexter
+    implementation("com.karumi:dexter:6.0.1")
+
 
 }
