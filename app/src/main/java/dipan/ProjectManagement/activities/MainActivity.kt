@@ -36,6 +36,11 @@ class MainActivity : BaseActivity() {
         //set action bar
         setUpActionBar()
 
+
+        //set navigation drawer details
+        FirestoreClass().loadUserData(this)
+
+
         //side drawer ke buttons ke on click listeners
         mainBinding?.navView?.setNavigationItemSelectedListener { menuItem->
             when(menuItem.itemId){
@@ -61,8 +66,12 @@ class MainActivity : BaseActivity() {
         }
 
 
-        //set navigation drawer details
-        FirestoreClass().loadUserData(this)
+        //fab
+        appBarBinding?.fabCreateBoard?.setOnClickListener {
+            val intent= Intent(this@MainActivity,CreateBoardActivity::class.java)
+            startActivity(intent)
+        }
+
 
     }
 
@@ -89,6 +98,7 @@ class MainActivity : BaseActivity() {
 
     }
 
+    //toggle button on setup action bar
     private fun toggleDrawer() {
         if(mainBinding?.drawerLayout?.isDrawerOpen(GravityCompat.START) == true){
             mainBinding?.drawerLayout?.closeDrawer(GravityCompat.START)
@@ -97,7 +107,7 @@ class MainActivity : BaseActivity() {
         }
     }
 
-
+    //side ke drawer main details update -> called by firestore class after successfully retrieving user info
     fun updateNavigationUserDetails(user: User){
         val navView=mainBinding?.navView// Get a reference to the NavigationView
         val headerView=navView?.getHeaderView(0) // Get a reference to the header view
