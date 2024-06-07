@@ -29,6 +29,7 @@ import dipan.ProjectManagement.databinding.ActivityMyProfileBinding
 import dipan.ProjectManagement.firebase.FirestoreClass
 import dipan.ProjectManagement.models.User
 import dipan.ProjectManagement.utils.Constants
+import dipan.ProjectManagement.utils.Constants.PICK_IMAGE_REQUEST_CODE
 import java.io.IOException
 import java.util.jar.Manifest
 
@@ -36,11 +37,11 @@ class MyProfileActivity : BaseActivity() {
     private var profileBinding: ActivityMyProfileBinding? = null //the parent layout
 
 
-    //for permission code
-    companion object{
-        private const val READ_STORAGE_PERMISSION_CODE=1
-        private const val PICK_IMAGE_REQUEST_CODE=2
-    }
+    //for permission code -> In constants
+//    companion object{
+//        private const val READ_STORAGE_PERMISSION_CODE=1
+//        private const val PICK_IMAGE_REQUEST_CODE=2
+//    }
 
     // Add a global variable for URI of a selected image from "phone storage."
     private var mSelectedImageFileUri: Uri? = null
@@ -74,7 +75,7 @@ class MyProfileActivity : BaseActivity() {
                 ).withListener(object : MultiplePermissionsListener {
                     override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
                         if(report!!.areAllPermissionsGranted()){
-                            showImageChooser()
+                            Constants.showImageChooser(this@MyProfileActivity)
                         }
                     }
 
@@ -115,14 +116,7 @@ class MyProfileActivity : BaseActivity() {
     }
 
     //to pick image from gallery
-    private fun showImageChooser(){
-        //pick image from gallery
-        val galleryIntent=Intent(
-            Intent.ACTION_PICK,
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-        )
-        startActivityForResult(galleryIntent, PICK_IMAGE_REQUEST_CODE)
-    }
+    //function in constant now
 
     //get activity result
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -208,7 +202,7 @@ class MyProfileActivity : BaseActivity() {
 
             val sRef:StorageReference=FirebaseStorage.getInstance().reference.child(
                 "USER_IMAGE"+System.currentTimeMillis()+"."+
-                        getFileExtension(mSelectedImageFileUri!!) //name of the file we want => generate unique name
+                        Constants.getFileExtension(this,mSelectedImageFileUri!!) //name of the file we want => generate unique name
             )
 
             sRef.putFile(mSelectedImageFileUri!!).addOnSuccessListener { taskSnapshot ->//write the file in storage
@@ -286,10 +280,7 @@ class MyProfileActivity : BaseActivity() {
 
 
     //check the file type from the URI  to check if we can use as image
-    private fun getFileExtension(uri: Uri):String?{
-        return MimeTypeMap.getSingleton().getExtensionFromMimeType(contentResolver.getType(uri))
-    }
-
+    //  =>Now in constant
     private fun setupToolbar(){
 
         val toolbar=profileBinding?.toolbarMyProfileActivity
