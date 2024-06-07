@@ -192,7 +192,7 @@ class MyProfileActivity : BaseActivity() {
     }
 
 
-    //upload to storage
+    //upload to cloud storage
     private fun uploadUserImage(){
 
 
