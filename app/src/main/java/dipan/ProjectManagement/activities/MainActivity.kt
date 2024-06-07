@@ -1,7 +1,9 @@
 package dipan.ProjectManagement.activities
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.core.graphics.toColorInt
 import androidx.core.view.GravityCompat
 import com.bumptech.glide.Glide
@@ -19,6 +21,10 @@ class MainActivity : BaseActivity() {
     private var appBarBinding: AppBarMainBinding? = null //the top toolbar
     private var mainContentBinding: MainContentBinding? = null //the recycler view containing
 
+    companion object{
+        const val MY_PROFILE_REQUEST_CODE:Int=11
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainBinding= ActivityMainBinding.inflate(layoutInflater)
@@ -35,7 +41,7 @@ class MainActivity : BaseActivity() {
             when(menuItem.itemId){
                 R.id.nav_myProfile -> {
                     val intent= Intent(this@MainActivity,MyProfileActivity::class.java)
-                    startActivity(intent)
+                    startActivityForResult(intent,MY_PROFILE_REQUEST_CODE)
                     true
                 }
                 R.id.nav_signOut -> {
@@ -58,6 +64,16 @@ class MainActivity : BaseActivity() {
         //set navigation drawer details
         FirestoreClass().loadUserData(this)
 
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(resultCode==Activity.RESULT_OK && requestCode==MY_PROFILE_REQUEST_CODE){
+            FirestoreClass().loadUserData(this)
+        }else{
+            Log.e("Activity_Result_error","Cancelled or something went wrong")
+        }
     }
 
     private fun setUpActionBar(){

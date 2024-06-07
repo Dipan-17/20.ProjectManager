@@ -279,6 +279,9 @@ class MyProfileActivity : BaseActivity() {
     fun profileUpdateSuccess(){
         hideProgressDialog()
         showErrorSnackBar("Profile updated successfully")
+
+        setResult(Activity.RESULT_OK)//for updating the side nav
+
     }
 
 
