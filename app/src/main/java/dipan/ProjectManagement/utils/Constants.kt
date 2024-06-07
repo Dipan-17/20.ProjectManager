@@ -8,17 +8,23 @@ import android.webkit.MimeTypeMap
 import dipan.ProjectManagement.activities.MyProfileActivity
 
 object Constants {
+    //collections in firestore
     const val USERS: String="Users" //the table
+    const val BOARDS:String="Boards"
 
+
+
+    //fields in the user Users table
     const val IMAGE:String="image"
     const val NAME:String="name"
     const val MOBILE:String="mobile"
 
-
+    //permission codes
     const val READ_STORAGE_PERMISSION_CODE=1
     const val PICK_IMAGE_REQUEST_CODE=2
 
 
+    //helper functions
      fun getFileExtension(activity: Activity,uri: Uri):String?{
         return MimeTypeMap.getSingleton().getExtensionFromMimeType(activity.contentResolver.getType(uri))
     }

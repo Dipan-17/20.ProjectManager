@@ -6,15 +6,21 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import dipan.ProjectManagement.activities.CreateBoardActivity
 import dipan.ProjectManagement.activities.MainActivity
 import dipan.ProjectManagement.activities.MyProfileActivity
 import dipan.ProjectManagement.activities.SignInActivity
 import dipan.ProjectManagement.activities.SignUpActivity
+import dipan.ProjectManagement.models.Board
 import dipan.ProjectManagement.models.User
 import dipan.ProjectManagement.utils.Constants
 
 class FirestoreClass {
     private var mFireStore = FirebaseFirestore.getInstance()
+
+
+    //User collection related functions
+
 
     //register user not only in auth -> but also store in database so that we can use it later
     fun registerUser(activity: SignUpActivity, userInfo: User) {
@@ -106,4 +112,28 @@ class FirestoreClass {
         }
         return currentUserID
     }
+
+
+
+
+
+    //board collection functions
+
+    //create a new board
+    fun createBoard(activity: CreateBoardActivity,board:Board){
+            mFireStore.collection(Constants.BOARDS)//collection name we want to access
+                .document()//every user has his own document -> unique for each user
+                .set(board, SetOptions.merge())//set the data in the document
+                .addOnSuccessListener {
+                    Toast.makeText(activity,"Board created successfully",Toast.LENGTH_SHORT).show()
+                    activity.boardCreatedSuccessfully()
+                }
+                .addOnFailureListener {
+                    e ->
+                    activity.hideProgressDialog()
+                    Log.e("FireStoreError", "Error while Creating the board", e)
+                }
+
+    }
+
 }

@@ -26,6 +26,8 @@ class CreateBoardActivity : BaseActivity() {
 
     private var mSelectedImageFileUri: Uri? = null
 
+    private lateinit var mUserName:String//to know who created the board
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         createBoardBinding= ActivityCreateBoardBinding.inflate(layoutInflater)
@@ -33,12 +35,27 @@ class CreateBoardActivity : BaseActivity() {
 
         setupToolbar()
 
+        //get user name
+        if(intent.hasExtra(Constants.NAME)){
+            mUserName=intent.getStringExtra(Constants.NAME).toString()
+        }
+
         //image picker
         createBoardBinding?.ivBoardImage?.setOnClickListener {
             checkPermission()
         }
 
     }
+
+    //to know successful creation
+    fun boardCreatedSuccessfully(){
+        hideProgressDialog()
+        setResult(Activity.RESULT_OK)
+
+        finish()
+    }
+
+
 
     //permission handling
     private fun checkPermission(){

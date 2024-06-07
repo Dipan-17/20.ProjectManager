@@ -15,11 +15,14 @@ import dipan.ProjectManagement.databinding.MainContentBinding
 import dipan.ProjectManagement.databinding.NavHeaderMainBinding
 import dipan.ProjectManagement.firebase.FirestoreClass
 import dipan.ProjectManagement.models.User
+import dipan.ProjectManagement.utils.Constants
 
 class MainActivity : BaseActivity() {
     private var mainBinding: ActivityMainBinding? = null //the parent layout
     private var appBarBinding: AppBarMainBinding? = null //the top toolbar
     private var mainContentBinding: MainContentBinding? = null //the recycler view containing
+
+    private lateinit var mUserName:String//to know who created the board
 
     companion object{
         const val MY_PROFILE_REQUEST_CODE:Int=11
@@ -66,9 +69,10 @@ class MainActivity : BaseActivity() {
         }
 
 
-        //fab
+        //fab -> create board
         appBarBinding?.fabCreateBoard?.setOnClickListener {
             val intent= Intent(this@MainActivity,CreateBoardActivity::class.java)
+            intent.putExtra(Constants.NAME,mUserName)
             startActivity(intent)
         }
 
@@ -125,6 +129,9 @@ class MainActivity : BaseActivity() {
             .into(profile!!)
 
         userName?.text=user.name
+
+        mUserName=user.name
+
     }
 
     override fun onBackPressed() {
