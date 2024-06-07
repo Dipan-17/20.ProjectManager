@@ -188,19 +188,21 @@ class MyProfileActivity : BaseActivity() {
 
                 //store the link to the image int somewhere -> storage
                 taskSnapshot.metadata!!.reference!!.downloadUrl.addOnSuccessListener {uri->
-                    Log.i("Downloadable Image URL",uri.toString())
+                    Log.e("Image_URL",uri.toString())
                     mProfileImageURL=uri.toString() //get the link to the image in storage
 
                     //TODO update the profile using this URI
+                    hideProgressDialog()
                     showErrorSnackBar("Task successfully completed")
                 }
             }.addOnFailureListener{
+                hideProgressDialog()
                 showErrorSnackBar(it.message.toString())
 
             }
 
         }
-        hideProgressDialog()
+
     }
 
 
