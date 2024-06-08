@@ -105,4 +105,16 @@ class TaskListActivity : BaseActivity() {
         showProgressDialog(resources.getString(R.string.please_wait))
         FirestoreClass().addUpdateTaskList(this,mBoardDetails)
     }
+
+    //edit the name of a list
+    fun updateTaskList(position:Int,taskListName:String,model:Task){
+        val task=Task(taskListName,model.createdBy)
+
+        mBoardDetails.taskList[position]=task //update the task list -> replace the old task with the new one
+        mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size-1) //remove the last item -> add button
+
+        //same as creating a new task
+        showProgressDialog(resources.getString(R.string.please_wait))
+        FirestoreClass().addUpdateTaskList(this,mBoardDetails)
+    }
 }

@@ -192,7 +192,7 @@ class FirestoreClass {
 
         mFireStore.collection(Constants.BOARDS)
             .document(board.documentId)//we are passing id-> Create | if empty -> create a new one
-            .update(taskListHashMap)
+            .update(taskListHashMap)//replace the prev hash map with the new one
             .addOnSuccessListener {
                 Log.e("FireStoreSuccess","Task List updated successfully")
                 activity.addUpdateTaskListSuccess()

@@ -91,6 +91,37 @@ open class TaskListItemAdapter(private val context: Context,
 
         }
 
+
+
+        //on click listeners to the add and delete list buttons
+        holder.itemBinding.ibEditListName.setOnClickListener {
+            holder.itemBinding.etTaskListName.setText(model.title)
+            holder.itemBinding.llTitleView.visibility=View.GONE
+            holder.itemBinding.cvEditTaskListName.visibility=View.VISIBLE
+        }
+        //cancel editing the name
+        holder.itemBinding.ibCloseEditableView.setOnClickListener {
+            holder.itemBinding.llTitleView.visibility=View.VISIBLE
+            holder.itemBinding.cvEditTaskListName.visibility=View.GONE
+        }
+        //done editing the name
+        holder?.itemBinding?.ibDoneEditListName?.setOnClickListener {
+            val listName=holder.itemBinding.etEditTaskListName.text.toString()
+            if(listName.isNotEmpty()){
+                if(context is TaskListActivity) {
+                    //edit the name of the list
+                    context.updateTaskList(position,listName,model)
+                }
+            }else{
+                //show error
+                Toast.makeText(context,"Name cannot be empty",Toast.LENGTH_SHORT).show()
+            }
+
+
+        }
+
+
+
         holder.bindItem(model)
     }
 
