@@ -3,10 +3,13 @@ package dipan.ProjectManagement.activities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.graphics.toColorInt
+import androidx.recyclerview.widget.LinearLayoutManager
 import dipan.ProjectManagement.R
+import dipan.ProjectManagement.adapters.TaskListItemAdapter
 import dipan.ProjectManagement.databinding.ActivityTaskListBinding
 import dipan.ProjectManagement.firebase.FirestoreClass
 import dipan.ProjectManagement.models.Board
+import dipan.ProjectManagement.models.Task
 import dipan.ProjectManagement.utils.Constants
 
 class TaskListActivity : BaseActivity() {
@@ -37,6 +40,18 @@ class TaskListActivity : BaseActivity() {
 
         //setup toolbar with the doc name
         setupToolbar(board.name)
+
+        //just to show the in the UI
+        val addTaskList=Task(resources.getString(R.string.add_list))
+        board.taskList.add(addTaskList)
+
+        //set the adapter
+        taskListBinding?.rvTaskList?.setHasFixedSize(true)
+        taskListBinding?.rvTaskList?.layoutManager=LinearLayoutManager(this@TaskListActivity,
+            LinearLayoutManager.HORIZONTAL,false)
+
+        val adapter= TaskListItemAdapter(this,board.taskList)
+        taskListBinding?.rvTaskList?.adapter=adapter
 
     }
 
