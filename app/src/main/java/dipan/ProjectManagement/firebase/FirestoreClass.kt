@@ -11,6 +11,7 @@ import dipan.ProjectManagement.activities.MainActivity
 import dipan.ProjectManagement.activities.MyProfileActivity
 import dipan.ProjectManagement.activities.SignInActivity
 import dipan.ProjectManagement.activities.SignUpActivity
+import dipan.ProjectManagement.activities.TaskListActivity
 import dipan.ProjectManagement.models.Board
 import dipan.ProjectManagement.models.User
 import dipan.ProjectManagement.utils.Constants
@@ -122,7 +123,7 @@ class FirestoreClass {
     //create a new board
     fun createBoard(activity: CreateBoardActivity,board:Board){
             mFireStore.collection(Constants.BOARDS)//collection name we want to access
-                .document()//every user has his own document -> unique for each user
+                .document()//every board has a document id in the firebase storage -> this is stored in the document id column of the board class
                 .set(board, SetOptions.merge())//set the data in the document
                 .addOnSuccessListener {
                     Toast.makeText(activity,"Board created successfully",Toast.LENGTH_SHORT).show()
@@ -140,6 +141,7 @@ class FirestoreClass {
     //get list of all boards
     fun getBoardsList(activity:MainActivity){
         mFireStore.collection(Constants.BOARDS)
+            //get all the matching documents -> whereArray
             .whereArrayContains(Constants.ASSIGNED_TO,getCurrentUserID())//check if the user is assigned to the board
             .get()
             .addOnSuccessListener { document ->
@@ -161,4 +163,26 @@ class FirestoreClass {
                 Log.e("FireStoreError", "Error while getting the board list", e)
             }
     }
+
+
+    //get the specific board details for task list activity
+    fun getBoardDetails(activity: TaskListActivity,documentId:String){
+        mFireStore.collection(Constants.BOARDS)
+            //only get the specific board
+            .document(documentId)
+            .get()
+            .addOnSuccessListener { document->
+
+                val board=document.toObject(Board::class.java)!!
+                board.documentId=documentId
+                activity.boardDetails(board)
+
+            }
+            .addOnFailureListener {
+                e->
+                activity.hideProgressDialog()
+                Log.e("FireStoreError", "Error while getting the board details", e)
+            }
+    }
+
 }

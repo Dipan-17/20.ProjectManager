@@ -120,6 +120,7 @@ class MainActivity : BaseActivity() {
             adapter.setOnClickListener(object: BoardItemsAdapter.onClickInterface{
                 override fun onClick(position: Int, model: Board) {
                     val intent=Intent(this@MainActivity, TaskListActivity::class.java)
+                    intent.putExtra(Constants.DOCUMENT_ID,model.documentId)
                     startActivity(intent)
                 }
             })

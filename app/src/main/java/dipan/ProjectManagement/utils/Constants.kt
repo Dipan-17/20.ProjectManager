@@ -21,6 +21,9 @@ object Constants {
     const val ASSIGNED_TO:String="assignedTo"
 
 
+    //for passing ids to tasklist to retrive info
+    const val DOCUMENT_ID: String ="documentID"
+
     //permission codes
     const val READ_STORAGE_PERMISSION_CODE=1
     const val PICK_IMAGE_REQUEST_CODE=2
