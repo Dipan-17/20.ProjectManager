@@ -13,6 +13,9 @@ import dipan.ProjectManagement.models.Board
 open class BoardItemsAdapter(private val context: Context,
                         private val list: ArrayList<Board>):
     RecyclerView.Adapter<BoardItemsAdapter.MainViewHolder>() {
+
+
+    private var onClickListener: onClickInterface?=null
     inner class MainViewHolder(val itemBinding:ItemBoardBinding):RecyclerView.ViewHolder(itemBinding.root){
         //bind the data to the card
         fun bindItem(model:Board){
@@ -37,6 +40,25 @@ open class BoardItemsAdapter(private val context: Context,
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
         val model=list[position]
         holder.bindItem(model)
+
+        holder.itemView.setOnClickListener{
+            //whatever you want to do when clicked
+            if(onClickListener!=null){
+                onClickListener!!.onClick(position,model)
+            }
+        }
     }
+
+    //for clicking recycler view items
+    fun setOnClickListener(onClickListener: onClickInterface){
+        this.onClickListener=onClickListener
+    }
+
+    interface onClickInterface{
+        //we need position to identify
+        //model to populate the detail activity
+        fun onClick(position: Int, model: Board)
+    }
+
 
     }

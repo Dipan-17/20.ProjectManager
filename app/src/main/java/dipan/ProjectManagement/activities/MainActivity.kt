@@ -117,6 +117,14 @@ class MainActivity : BaseActivity() {
             mainContentBinding?.rvBoardsList?.adapter= adapter
 
 
+            adapter.setOnClickListener(object: BoardItemsAdapter.onClickInterface{
+                override fun onClick(position: Int, model: Board) {
+                    val intent=Intent(this@MainActivity, TaskListActivity::class.java)
+                    startActivity(intent)
+                }
+            })
+
+
 
         }else{
             //visibility
