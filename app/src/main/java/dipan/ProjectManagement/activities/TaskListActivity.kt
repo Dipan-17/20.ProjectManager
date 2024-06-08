@@ -39,6 +39,7 @@ class TaskListActivity : BaseActivity() {
 
 
     //this is called by the firestore class on success retrieval of a board
+    //updates the task list recycler view
     fun boardDetails(board: Board){
         hideProgressDialog()
 
@@ -60,6 +61,7 @@ class TaskListActivity : BaseActivity() {
 
         val adapter= TaskListItemAdapter(this,board.taskList)
         taskListBinding?.rvTaskList?.adapter=adapter
+        //adapter.notifyDataSetChanged()
 
     }
 
@@ -156,6 +158,8 @@ class TaskListActivity : BaseActivity() {
         //use the old update function only -> now the board is updated
         showProgressDialog(resources.getString(R.string.please_wait))
         FirestoreClass().addUpdateTaskList(this,mBoardDetails)
+
+
     }
 
 

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import dipan.ProjectManagement.R
@@ -157,6 +158,14 @@ open class TaskListItemAdapter(private val context: Context,
                 Toast.makeText(context,"Please enter a card name",Toast.LENGTH_SHORT).show()
             }
         }
+
+
+        //recycler view for cards
+        holder.itemBinding.rvCardList.layoutManager= LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
+        //holder.itemBinding.rvCardList.setHasFixedSize(true)
+        val cardAdapter=CardListItemAdapter(context,model.card)
+        holder.itemBinding.rvCardList.adapter=cardAdapter
+
 
 
         holder.bindItem(model)
