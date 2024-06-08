@@ -21,8 +21,11 @@ object Constants {
     const val ASSIGNED_TO:String="assignedTo"
 
 
-    //for passing ids to tasklist to retrive info
+    //for passing ids to tasklist to retrieve info
     const val DOCUMENT_ID: String ="documentID"
+
+    //create a new board
+    const val TASK_LIST:String="taskList"
 
     //permission codes
     const val READ_STORAGE_PERMISSION_CODE=1

@@ -14,6 +14,8 @@ import dipan.ProjectManagement.utils.Constants
 
 class TaskListActivity : BaseActivity() {
     private var taskListBinding: ActivityTaskListBinding? = null
+
+    private lateinit var mBoardDetails:Board
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -35,13 +37,18 @@ class TaskListActivity : BaseActivity() {
     }
 
 
+    //this is called by the firestore class on success retrieval of a board
     fun boardDetails(board: Board){
         hideProgressDialog()
+
+        //assign the details
+        mBoardDetails=board
 
         //setup toolbar with the doc name
         setupToolbar(board.name)
 
-        //just to show the in the UI
+        //just to show the in the UI => This is used as empty list don't look good
+        //this is later used in the adapter as an add button
         val addTaskList=Task(resources.getString(R.string.add_list))
         board.taskList.add(addTaskList)
 
@@ -73,5 +80,29 @@ class TaskListActivity : BaseActivity() {
         }
 
 
+    }
+
+
+    fun addUpdateTaskListSuccess(){
+        hideProgressDialog() //we have added to firestore
+
+        showProgressDialog(resources.getString(R.string.please_wait))
+        FirestoreClass().getBoardDetails(this,mBoardDetails.documentId)
+
+    }
+    //create a new task
+    fun createTaskList(taskListName:String){
+        val task=Task(taskListName,FirestoreClass().getCurrentUserID())
+        //update the board
+        mBoardDetails.taskList.add(0,task) //add a new task to the beginning of board
+
+
+        //we are removing the last item cause it is just the add button
+        //when we call addUpdateTaskList -> at the end it will call fun boardDetails() -> which will add the add button again
+        mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size-1) //remove the last item
+
+
+        showProgressDialog(resources.getString(R.string.please_wait))
+        FirestoreClass().addUpdateTaskList(this,mBoardDetails)
     }
 }

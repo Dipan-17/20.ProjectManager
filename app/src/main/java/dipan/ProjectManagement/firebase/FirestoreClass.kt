@@ -185,4 +185,23 @@ class FirestoreClass {
             }
     }
 
+    //create a new task
+    fun addUpdateTaskList(activity: TaskListActivity,board:Board){
+        val taskListHashMap=HashMap<String,Any>()
+        taskListHashMap[Constants.TASK_LIST]=board.taskList//this is the updated task list
+
+        mFireStore.collection(Constants.BOARDS)
+            .document(board.documentId)//we are passing id-> Create | if empty -> create a new one
+            .update(taskListHashMap)
+            .addOnSuccessListener {
+                Log.e("FireStoreSuccess","Task List updated successfully")
+                activity.addUpdateTaskListSuccess()
+            }
+            .addOnFailureListener {
+                e->
+                activity.hideProgressDialog()
+                Log.e("FireStoreError", "Error while adding the task list", e)
+            }
+    }
+
 }

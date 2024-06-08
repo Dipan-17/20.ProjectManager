@@ -1,14 +1,17 @@
 package dipan.ProjectManagement.adapters
 
 import android.content.Context
+
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import dipan.ProjectManagement.R
-import dipan.ProjectManagement.databinding.ItemBoardBinding
+import dipan.ProjectManagement.activities.TaskListActivity
 import dipan.ProjectManagement.databinding.ItemTaskBinding
 import dipan.ProjectManagement.models.Board
 import dipan.ProjectManagement.models.Task
@@ -47,11 +50,45 @@ open class TaskListItemAdapter(private val context: Context,
         val model=list[position]
 
         if(position==list.size-1){
-            holder.itemBinding.tvAddTaskList.visibility= View.VISIBLE
-            holder.itemBinding.llTaskItem.visibility=View.GONE
+            //kyuki this is last element
+            //iske andr kuch nhi hain
+            //iska only function is to show the button to add a new task
+            holder.itemBinding.tvAddTaskList.visibility= View.VISIBLE //this is the button that becomes active
+            holder.itemBinding.llTaskItem.visibility=View.GONE //since there is no task to show
         }else{
+            //this a existing item
             holder.itemBinding.tvAddTaskList.visibility= View.GONE
             holder.itemBinding.llTaskItem.visibility=View.VISIBLE
+        }
+
+        holder.itemBinding.tvTaskListTitle.text =model.title
+
+        //add a new task
+        holder.itemBinding.tvAddTaskList.setOnClickListener {
+            holder.itemBinding.tvAddTaskList.visibility=View.GONE //add button is gone
+            holder.itemBinding.cvAddTaskListName.visibility=View.VISIBLE //the card to take the name as input
+        }
+
+        //cancel adding a new task
+        holder?.itemBinding?.ibCloseListName?.setOnClickListener {
+            holder.itemBinding.tvAddTaskList.visibility=View.VISIBLE
+            holder.itemBinding.cvAddTaskListName.visibility=View.GONE
+        }
+
+        //agreed to creating a new task
+        holder?.itemBinding?.ibDoneListName?.setOnClickListener {
+            val listName=holder.itemBinding.etTaskListName.text.toString()
+            if(listName.isNotEmpty()){
+                if(context is TaskListActivity) {
+                    //add the task to the list
+                    context.createTaskList(listName)
+                }
+            }else{
+                //show error
+                Toast.makeText(context,"Please enter a task name",Toast.LENGTH_SHORT).show()
+            }
+
+
         }
 
         holder.bindItem(model)
