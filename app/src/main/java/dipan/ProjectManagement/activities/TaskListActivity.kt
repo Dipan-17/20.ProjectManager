@@ -9,6 +9,7 @@ import dipan.ProjectManagement.adapters.TaskListItemAdapter
 import dipan.ProjectManagement.databinding.ActivityTaskListBinding
 import dipan.ProjectManagement.firebase.FirestoreClass
 import dipan.ProjectManagement.models.Board
+import dipan.ProjectManagement.models.Card
 import dipan.ProjectManagement.models.Task
 import dipan.ProjectManagement.utils.Constants
 
@@ -126,4 +127,36 @@ class TaskListActivity : BaseActivity() {
         showProgressDialog(resources.getString(R.string.please_wait))
         FirestoreClass().addUpdateTaskList(this,mBoardDetails) //this functions just updates the hashmap
     }
+
+    //for cards creation
+    fun addCardToTaskList(position: Int,cardName:String){
+        mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size-1) //remove the last item -> add button
+
+
+        val cardAssignedUsersList:ArrayList<String> = ArrayList()
+        val currentUserID=FirestoreClass().getCurrentUserID()
+        cardAssignedUsersList.add(currentUserID)
+
+
+        val card= Card(cardName,currentUserID,cardAssignedUsersList)
+        //existing cards in existing list
+        val cardsList=mBoardDetails.taskList[position].card
+        cardsList.add(card) //add the new card to the list
+
+        //create a new task
+        val task=Task(
+            mBoardDetails.taskList[position].title,
+            mBoardDetails.taskList[position].createdBy,
+            cardsList
+        )
+
+        //replace the old task with the new one
+        mBoardDetails.taskList[position]=task
+
+        //use the old update function only -> now the board is updated
+        showProgressDialog(resources.getString(R.string.please_wait))
+        FirestoreClass().addUpdateTaskList(this,mBoardDetails)
+    }
+
+
 }

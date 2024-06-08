@@ -50,6 +50,8 @@ open class TaskListItemAdapter(private val context: Context,
     override fun onBindViewHolder(holder: TaskListItemAdapter.MainViewHolder, position: Int) {
         val model=list[position]
 
+        //WHAT TO DISPLAY
+
         if(position==list.size-1){
             //kyuki this is last element
             //iske andr kuch nhi hain
@@ -63,6 +65,10 @@ open class TaskListItemAdapter(private val context: Context,
         }
 
         holder.itemBinding.tvTaskListTitle.text =model.title
+
+
+        //FOR LISTS
+
 
         //add a new task
         holder.itemBinding.tvAddTaskList.setOnClickListener {
@@ -121,6 +127,35 @@ open class TaskListItemAdapter(private val context: Context,
         //delete the list
         holder.itemBinding.ibDeleteList.setOnClickListener {
             alertDialogForDeleteList(position,model)
+        }
+
+
+
+        //for CARDS
+
+
+        //for adding card
+        holder.itemBinding.tvAddCard.setOnClickListener {
+            holder.itemBinding.tvAddCard.visibility=View.GONE
+            holder.itemBinding.cvAddCard.visibility=View.VISIBLE
+        }
+        //cancel adding card
+        holder.itemBinding.ibCloseCardName.setOnClickListener {
+            holder.itemBinding.tvAddCard.visibility=View.VISIBLE
+            holder.itemBinding.cvAddCard.visibility=View.GONE
+        }
+        //done adding card
+        holder.itemBinding.ibDoneCardName.setOnClickListener {
+            val cardName=holder.itemBinding.etCardName.text.toString()
+            if(cardName.isNotEmpty()){
+                if(context is TaskListActivity) {
+                    //add the card to the list
+                    //TODO
+                }
+            }else{
+                //show error
+                Toast.makeText(context,"Please enter a card name",Toast.LENGTH_SHORT).show()
+            }
         }
 
 
