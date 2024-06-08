@@ -150,7 +150,7 @@ open class TaskListItemAdapter(private val context: Context,
             if(cardName.isNotEmpty()){
                 if(context is TaskListActivity) {
                     //add the card to the list
-                    //TODO
+                    context.addCardToTaskList(position,cardName)
                 }
             }else{
                 //show error
