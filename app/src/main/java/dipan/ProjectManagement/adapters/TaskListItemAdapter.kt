@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import dipan.ProjectManagement.R
@@ -116,10 +117,11 @@ open class TaskListItemAdapter(private val context: Context,
                 //show error
                 Toast.makeText(context,"Name cannot be empty",Toast.LENGTH_SHORT).show()
             }
-
-
         }
-
+        //delete the list
+        holder.itemBinding.ibDeleteList.setOnClickListener {
+            alertDialogForDeleteList(position,model)
+        }
 
 
         holder.bindItem(model)
@@ -128,6 +130,37 @@ open class TaskListItemAdapter(private val context: Context,
     override fun getItemCount(): Int {
         return list.size
     }
+
+
+
+    //for delete button
+    private fun alertDialogForDeleteList(position: Int, model: Task) {
+        val builder = AlertDialog.Builder(context)
+        //set the title
+        builder.setTitle("Alert")
+        //set the message
+        builder.setMessage("Are you sure you want to delete ${model.title}?")
+        builder.setIcon(R.drawable.ic_alert_24_dp)
+
+        //set the positive button
+        builder.setPositiveButton("Yes") { dialogInterface, which ->
+            if (context is TaskListActivity) {
+                context.deleteTaskList(position)
+            }
+        }
+        //set the negative button
+        builder.setNegativeButton("No") { dialogInterface, which ->
+            dialogInterface.dismiss()
+        }
+
+        //create the dialog
+        val alertDialog: AlertDialog = builder.create()
+        //show the dialog
+        alertDialog.show()
+    }
+
+
+
 
     //we need the recycler view to cover only certain part of the screen
     //so we need to calculate the width accurately in dp

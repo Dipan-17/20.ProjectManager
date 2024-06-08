@@ -117,4 +117,13 @@ class TaskListActivity : BaseActivity() {
         showProgressDialog(resources.getString(R.string.please_wait))
         FirestoreClass().addUpdateTaskList(this,mBoardDetails)
     }
+    //delete a task
+    fun deleteTaskList(position: Int){
+        mBoardDetails.taskList.removeAt(position) //remove the task from the list
+        mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size-1) //remove the last item -> add button
+
+        //same as creating a new task
+        showProgressDialog(resources.getString(R.string.please_wait))
+        FirestoreClass().addUpdateTaskList(this,mBoardDetails) //this functions just updates the hashmap
+    }
 }

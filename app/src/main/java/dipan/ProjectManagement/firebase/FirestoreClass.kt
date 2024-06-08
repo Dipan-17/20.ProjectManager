@@ -185,7 +185,10 @@ class FirestoreClass {
             }
     }
 
-    //create a new task
+    //create a new task, update name, delete one
+    //this function opens up the current board
+    //each board has a list of task
+    //this function directly updates the hashmap -> create update delete everything
     fun addUpdateTaskList(activity: TaskListActivity,board:Board){
         val taskListHashMap=HashMap<String,Any>()
         taskListHashMap[Constants.TASK_LIST]=board.taskList//this is the updated task list
