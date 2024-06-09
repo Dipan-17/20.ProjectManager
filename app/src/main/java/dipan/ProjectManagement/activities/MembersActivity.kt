@@ -1,5 +1,6 @@
 package dipan.ProjectManagement.activities
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -29,6 +30,10 @@ class MembersActivity : BaseActivity() {
 
     //for adding members
     private var mAssignedMembersList:ArrayList<User> = ArrayList()
+
+
+    //to check if we need to make reload task list activity when we go back
+    private var anyChangesMade:Boolean=false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,13 +77,25 @@ class MembersActivity : BaseActivity() {
 
     //called on success of getting a user -> we are not yet assigning that user to board in database
     fun memberDetails(user:User){
-        mBoardDetails.assignedTo.add(user.id) //add the new user to board
-        FirestoreClass().assignMemberToBoard(this@MembersActivity,mBoardDetails,user)
+        //mBoardDetails.assignedTo.add(user.id) //add the new user to board
+        //FirestoreClass().assignMemberToBoard(this@MembersActivity,mBoardDetails,user)
+
+        if (!mBoardDetails.assignedTo.contains(user.id)) {
+            mBoardDetails.assignedTo.add(user.id) //add the new user to board
+            FirestoreClass().assignMemberToBoard(this@MembersActivity,mBoardDetails,user)
+        } else {
+            hideProgressDialog()
+            Toast.makeText(this, "The user is already assigned to the board", Toast.LENGTH_SHORT).show()
+        }
+
     }
     fun memberAssignSuccess(user: User){
         hideProgressDialog()
         mAssignedMembersList.add(user)
         setUpMemberListRV(mAssignedMembersList)
+
+        //changes were made
+        anyChangesMade=true
     }
 
 
@@ -151,6 +168,15 @@ class MembersActivity : BaseActivity() {
         }
 
         dialog.show()
+    }
+
+
+    //to reload activity if we made changes and went back
+    override fun onBackPressed() {
+        if(anyChangesMade){
+            setResult(Activity.RESULT_OK)
+        }
+        super.onBackPressed()
     }
 
 }
