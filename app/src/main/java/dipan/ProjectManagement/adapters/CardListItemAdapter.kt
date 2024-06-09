@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.graphics.toColorInt
 import androidx.recyclerview.widget.RecyclerView
 import dipan.ProjectManagement.databinding.ItemCardBinding
 import dipan.ProjectManagement.models.Board
@@ -20,6 +21,16 @@ open class CardListItemAdapter(val context: Context,
         //where do we get data
         fun bindItem(card:Card){
             itemBinding?.tvCardName?.text=card.name
+
+            //set the color of the card
+            val cardColor=card.labelColor
+            if(cardColor.isNotEmpty()){
+                itemBinding.viewLabelColor?.visibility=android.view.View.VISIBLE
+                itemBinding.viewLabelColor?.setBackgroundColor(cardColor.toColorInt())
+            }else{
+                itemBinding.viewLabelColor?.visibility=android.view.View.GONE
+            }
+
         }
     }
 

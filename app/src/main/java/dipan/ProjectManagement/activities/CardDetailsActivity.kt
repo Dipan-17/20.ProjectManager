@@ -39,12 +39,19 @@ class CardDetailsActivity : BaseActivity() {
 
 
         //set the toolbar and edit text name to the existing name
+        //set the color to existing
         var currentCard=mBoardDetails.taskList[mTaskListPosition].card[mCardListPosition]//these are indexes only -> not one based
         setupToolbar(currentCard.name)
         cardDetailsBinding?.etNameCardDetails?.setText(currentCard.name)
 
         //directly move the cursor to the end of the text
         cardDetailsBinding?.etNameCardDetails?.setSelection(currentCard.name.length)
+
+        //color
+        mSelectedColor=mBoardDetails.taskList[mTaskListPosition].card[mCardListPosition].labelColor
+        if(mSelectedColor.isNotEmpty()){
+            setColor()
+        }
 
         //update button
         cardDetailsBinding?.btnUpdateCardDetails?.setOnClickListener {
