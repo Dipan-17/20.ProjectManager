@@ -160,6 +160,8 @@ open class TaskListItemAdapter(private val context: Context,
         }
 
 
+        //CHILD RECYCLER VIEW:
+
         //recycler view for cards
         holder.itemBinding.rvCardList.layoutManager= LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
         //holder.itemBinding.rvCardList.setHasFixedSize(true)
@@ -167,7 +169,17 @@ open class TaskListItemAdapter(private val context: Context,
         holder.itemBinding.rvCardList.adapter=cardAdapter
 
 
+        //onclick of cards
+        cardAdapter.setOnClickListener(object:CardListItemAdapter.onClickInterface{
+            override fun onClick(cardPosition: Int) {
+                if(context is TaskListActivity){
+                    context.cardDetails(position, cardPosition )
+                }
+            }
+        })
 
+
+        //parent holder
         holder.bindItem(model)
     }
 

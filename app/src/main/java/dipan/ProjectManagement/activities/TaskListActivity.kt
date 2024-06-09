@@ -191,6 +191,24 @@ class TaskListActivity : BaseActivity() {
     }
 
 
+    //for cards
+    fun cardDetails(taskListPostion:Int,cardPosition:Int){
+       //taskListPostion -> position of the task list
+        //cardPostion -> current card inside the task list
+        val intent=Intent(this,CardDetailsActivity::class.java)
+        startActivity(intent)
+
+
+    //        intent.putExtra(Constants.BOARD_DETAILS,mBoardDetails)
+//        intent.putExtra(Constants.TASK_LIST_ITEM_POSITION,taskListPostion)
+//        intent.putExtra(Constants.CARD_LIST_ITEM_POSITION,cardPosition)
+//        intent.putExtra(Constants.BOARD_DOCUMENT_ID,mBoardDocumentId)
+
+    }
+
+
+
+
     //to reload activity if any changes were made
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

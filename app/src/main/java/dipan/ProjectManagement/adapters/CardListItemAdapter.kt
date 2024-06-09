@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import dipan.ProjectManagement.databinding.ItemCardBinding
+import dipan.ProjectManagement.models.Board
 import dipan.ProjectManagement.models.Card
 
 open class CardListItemAdapter(val context: Context,
@@ -13,6 +14,7 @@ open class CardListItemAdapter(val context: Context,
     RecyclerView.Adapter<CardListItemAdapter.MainViewHolder>()
 
 {
+    private var onClickListener: onClickInterface?=null
     inner class MainViewHolder(val itemBinding:ItemCardBinding):RecyclerView.ViewHolder(itemBinding.root){
 
         //where do we get data
@@ -32,9 +34,25 @@ open class CardListItemAdapter(val context: Context,
 
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
         val card=cardList[position]
-
-        //Toast.makeText(context,"Card List Size: ${cardList.size}",Toast.LENGTH_SHORT).show()
-
         holder.bindItem(card)
+
+        holder.itemView.setOnClickListener{
+            //whatever you want to do when clicked
+            if(onClickListener!=null){
+                onClickListener!!.onClick(position)
+            }
+        }
+
+    }
+
+    //for clicking recycler view items
+    fun setOnClickListener(onClickListener: onClickInterface){
+        this.onClickListener=onClickListener
+    }
+
+    interface onClickInterface{
+        //we need position to identify
+        //model to populate the detail activity
+        fun onClick(position: Int)
     }
 }
