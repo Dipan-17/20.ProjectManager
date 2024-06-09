@@ -33,6 +33,8 @@ object Constants {
     //to get the user details from the user id -> for displaying members -> cause board only has assigned members id
     const val ID:String="id"
 
+    //getting data from email address
+    const val EMAIL:String="email"
 
     //permission codes
     const val READ_STORAGE_PERMISSION_CODE=1

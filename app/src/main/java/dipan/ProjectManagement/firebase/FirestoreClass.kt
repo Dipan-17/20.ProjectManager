@@ -236,5 +236,45 @@ class FirestoreClass {
 
     }
 
+    fun getMemberDetails(activity: MembersActivity,email:String){
+        mFireStore.collection(Constants.USERS)
+            .whereEqualTo(Constants.EMAIL,email) //one email only -> equal to
+            .get()
+            .addOnSuccessListener {
+                document ->
+                if(document.documents.size>0){
+                    val user=document.documents[0].toObject(User::class.java)!!
+                    activity.memberDetails(user)
+                }
+                else{
+                    activity.hideProgressDialog()
+                    activity.showErrorSnackBar("No such user exists")
+                }
+            }
+            .addOnFailureListener {
+                e->
+                activity.hideProgressDialog()
+                Log.e("FireStoreError", "Error while getting the member details", e)
+            }
+    }
+
+    fun assignMemberToBoard(activity: MembersActivity,board: Board,user: User){
+        val assignedToHashMap=HashMap<String,Any>()
+        //the key to this hashmap -> should be the field we want to update in the firestore
+        //the value is the new value that we want to put in the field
+        assignedToHashMap[Constants.ASSIGNED_TO]=board.assignedTo
+
+        mFireStore.collection(Constants.BOARDS)
+            .document(board.documentId)
+            .update(assignedToHashMap)
+            .addOnSuccessListener {
+                activity.memberAssignSuccess(user)
+            }
+            .addOnFailureListener {
+                e->
+                activity.hideProgressDialog()
+                Log.e("FireStoreError", "Error while assigning the member to the board", e)
+            }
+    }
 
 }

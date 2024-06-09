@@ -27,6 +27,9 @@ class MembersActivity : BaseActivity() {
     //to get the details from tasklist activity
     private lateinit var mBoardDetails:Board
 
+    //for adding members
+    private var mAssignedMembersList:ArrayList<User> = ArrayList()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -54,6 +57,9 @@ class MembersActivity : BaseActivity() {
      fun setUpMemberListRV(list:ArrayList<User>){
         hideProgressDialog()
 
+         //store the current assigned ones
+         mAssignedMembersList=list
+
         membersBinding?.rvMembersList?.layoutManager=LinearLayoutManager(this,
             LinearLayoutManager.VERTICAL,false)
 
@@ -62,6 +68,19 @@ class MembersActivity : BaseActivity() {
         val adapter= MemberItemsAdapter(this@MembersActivity,list)
         membersBinding?.rvMembersList?.adapter=adapter
     }
+
+
+    //called on success of getting a user -> we are not yet assigning that user to board in database
+    fun memberDetails(user:User){
+        mBoardDetails.assignedTo.add(user.id) //add the new user to board
+        FirestoreClass().assignMemberToBoard(this@MembersActivity,mBoardDetails,user)
+    }
+    fun memberAssignSuccess(user: User){
+        hideProgressDialog()
+        mAssignedMembersList.add(user)
+        setUpMemberListRV(mAssignedMembersList)
+    }
+
 
     private fun setupToolbar(title:String){
 
@@ -114,10 +133,11 @@ class MembersActivity : BaseActivity() {
 
             if(email.isNotEmpty()) {
                 dialog.dismiss()
-                //showProgressDialog(resources.getString(R.string.please_wait))
-                //FirestoreClass().getMemberDetails(this@MembersActivity,email)
 
-                //TODO
+                showProgressDialog(resources.getString(R.string.please_wait))
+                FirestoreClass().getMemberDetails(this@MembersActivity,email)
+
+
             }
             else{
                 //Toast.makeText(this@MembersActivity,"Please enter email address",Toast.LENGTH_SHORT).show()
