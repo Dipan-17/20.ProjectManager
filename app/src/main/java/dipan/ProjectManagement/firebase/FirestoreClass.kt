@@ -8,6 +8,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import dipan.ProjectManagement.activities.CreateBoardActivity
 import dipan.ProjectManagement.activities.MainActivity
+import dipan.ProjectManagement.activities.MembersActivity
 import dipan.ProjectManagement.activities.MyProfileActivity
 import dipan.ProjectManagement.activities.SignInActivity
 import dipan.ProjectManagement.activities.SignUpActivity
@@ -206,5 +207,34 @@ class FirestoreClass {
                 Log.e("FireStoreError", "Error while adding the task list", e)
             }
     }
+
+    //get all the members details from the assigned list
+    fun getAssignedMemberListDetails(activity:MembersActivity,memberID:ArrayList<String>){
+        mFireStore.collection(Constants.USERS)
+            //get all the matching documents -> whereArray
+            .whereIn(Constants.ID,memberID)//check if the id matches the current
+            .get()
+            .addOnSuccessListener {
+                document ->
+
+                Log.e("FireStore: ","MembersList: " + document.documents.toString())
+                Log.e("FireStore: ","MembersListSize: " + document.size().toString())
+
+                val memberList:ArrayList<User> = ArrayList()
+                //get all users in my list
+                for(i in document.documents){
+                    val user = i.toObject(User::class.java)!!
+                    memberList.add(user)
+                }
+                activity.setUpMemberListRV(memberList)
+            }
+            .addOnFailureListener {
+                e->
+                activity.hideProgressDialog()
+                Log.e("FireStoreError", "Error while getting the members list", e)
+            }
+
+    }
+
 
 }

@@ -95,6 +95,7 @@ class TaskListActivity : BaseActivity() {
             taskListBinding?.toolbarTaskListActivity.let{R.id.action_member}->{
                 //start the members activity
                 val intent=Intent(this,MembersActivity::class.java)
+                intent.putExtra(Constants.BOARD_DETAILS,mBoardDetails)
                 startActivity(intent)
                 return true
             }

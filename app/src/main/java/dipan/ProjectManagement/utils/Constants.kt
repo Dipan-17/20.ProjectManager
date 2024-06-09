@@ -27,6 +27,13 @@ object Constants {
     //create a new board
     const val TASK_LIST:String="taskList"
 
+    //for passing details to show members
+    const val BOARD_DETAILS: String="boardDetails"
+
+    //to get the user details from the user id -> for displaying members -> cause board only has assigned members id
+    const val ID:String="id"
+
+
     //permission codes
     const val READ_STORAGE_PERMISSION_CODE=1
     const val PICK_IMAGE_REQUEST_CODE=2
