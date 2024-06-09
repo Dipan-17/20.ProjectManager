@@ -36,6 +36,11 @@ object Constants {
     //getting data from email address
     const val EMAIL:String="email"
 
+    //to get card details for editing the card inside card details activity
+    const val TASK_LIST_ITEM_POSITION="taskListItemPosition"
+    const val CARD_LIST_ITEM_POSITION="cardListItemPosition"
+
+
     //permission codes
     const val READ_STORAGE_PERMISSION_CODE=1
     const val PICK_IMAGE_REQUEST_CODE=2

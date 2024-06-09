@@ -290,7 +290,7 @@ class MyProfileActivity : BaseActivity() {
         actionBar?.setDisplayHomeAsUpEnabled(true)
         actionBar?.setHomeAsUpIndicator(R.drawable.ic_black_color_back_24dp)
 
-        toolbar?.title = "My Profile"
+        actionBar?.title = "My Profile"
         toolbar?.setTitleTextColor("#ffffff".toColorInt())
 
         toolbar?.setNavigationOnClickListener {
