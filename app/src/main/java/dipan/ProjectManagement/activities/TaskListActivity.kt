@@ -1,7 +1,9 @@
 package dipan.ProjectManagement.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
 import androidx.core.graphics.toColorInt
 import androidx.recyclerview.widget.LinearLayoutManager
 import dipan.ProjectManagement.R
@@ -81,8 +83,23 @@ class TaskListActivity : BaseActivity() {
         toolbar?.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
-
-
+    }
+    //for the members button in the top taskbar
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_members,menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+    //onclick of menu options
+    override fun onOptionsItemSelected(item: android.view.MenuItem): Boolean {
+        when(item.itemId){
+            taskListBinding?.toolbarTaskListActivity.let{R.id.action_member}->{
+                //start the members activity
+                val intent=Intent(this,MembersActivity::class.java)
+                startActivity(intent)
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 
