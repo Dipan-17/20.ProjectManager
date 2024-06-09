@@ -43,14 +43,16 @@ abstract class LabelColorListDialog
         adapter= LabelColorListItemsAdapter(context,list,mSelectedColor)
         rvColorList.adapter=adapter
 
-        adapter!!.onClickListener =
+        adapter!!.setOnClickListener(
             object: LabelColorListItemsAdapter.onClickInterface{
                 override fun onClick(position: Int, color: String) {
                     dismiss()
                     onItemSelected(color)
                 }
             }
+        )
     }
 
+    //need to implement this in the activity where we create objects
     protected abstract fun onItemSelected(color: String)
 }

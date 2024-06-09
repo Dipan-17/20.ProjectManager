@@ -2,6 +2,7 @@ package dipan.ProjectManagement.activities
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.graphics.toColorInt
 import dipan.ProjectManagement.R
 import dipan.ProjectManagement.databinding.ActivityCardDetailsBinding
+import dipan.ProjectManagement.dialogs.LabelColorListDialog
 import dipan.ProjectManagement.firebase.FirestoreClass
 import dipan.ProjectManagement.models.Board
 import dipan.ProjectManagement.models.Card
@@ -24,6 +26,9 @@ class CardDetailsActivity : BaseActivity() {
     private lateinit var mBoardDetails:Board
     private  var mTaskListPosition:Int=-1
     private var mCardListPosition:Int=-1
+
+    //card color
+    private var mSelectedColor:String=""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +55,11 @@ class CardDetailsActivity : BaseActivity() {
                 Toast.makeText(this,"Please enter a card name",Toast.LENGTH_SHORT).show()
             }
 
+        }
+
+        //card color
+        cardDetailsBinding?.tvSelectLabelColor?.setOnClickListener {
+            labelColorListDialog()
         }
 
 
@@ -159,6 +169,43 @@ class CardDetailsActivity : BaseActivity() {
         hideProgressDialog()
         setResult(Activity.RESULT_OK)
         finish()
+    }
+
+
+    //for card colors
+    private fun colorsList():ArrayList<String>{
+        val colorsList:ArrayList<String> = ArrayList()
+        colorsList.add("#43C86F")
+        colorsList.add("#0C90F1")
+        colorsList.add("#5A67D8")
+        colorsList.add("#F72400")
+        colorsList.add("#7A8089")
+        colorsList.add("#D57C1D")
+        return colorsList
+    }
+
+    private fun setColor(){
+        cardDetailsBinding?.tvSelectLabelColor?.text = ""
+        cardDetailsBinding?.tvSelectLabelColor?.setBackgroundColor(Color.parseColor(mSelectedColor))
+
+    }
+
+    //trigger dialog
+    private fun labelColorListDialog(){
+        val colorsList=colorsList()
+        val listDialog=object: LabelColorListDialog(
+            this,//context
+            colorsList, //color list
+            resources.getString(R.string.str_select_label_color), //title
+            mSelectedColor)
+
+        {
+            override fun onItemSelected(color: String) {
+                mSelectedColor=color
+                setColor()
+            }
+        }
+        listDialog.show()
     }
 
 

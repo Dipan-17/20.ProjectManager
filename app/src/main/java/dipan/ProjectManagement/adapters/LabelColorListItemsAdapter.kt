@@ -14,10 +14,7 @@ open class LabelColorListItemsAdapter
 
     RecyclerView.Adapter<LabelColorListItemsAdapter.MainViewHolder>() {
 
-    var onClickListener: LabelColorListItemsAdapter.onClickInterface?=null
-
-
-
+    private var _onClickListener: LabelColorListItemsAdapter.onClickInterface?=null
 
     inner class MainViewHolder(val binding: ItemLabelColorBinding): RecyclerView.ViewHolder(binding.root){
         //bind the data to the card
@@ -26,6 +23,7 @@ open class LabelColorListItemsAdapter
             binding.ivSelectedColor.setBackgroundColor(Color.parseColor(color)) //the yes button
 
             //if the color is selected, show the yes button
+            //the previously selected color will have the yes button
             if(color==mSelectedColor) {
                 binding.ivSelectedColor.visibility = android.view.View.VISIBLE
             }else{
@@ -49,15 +47,15 @@ open class LabelColorListItemsAdapter
 
         holder.itemView.setOnClickListener{
             //whatever you want to do when clicked
-            if(onClickListener!=null){
-                onClickListener!!.onClick(position,color)
+            if(_onClickListener!=null){
+                _onClickListener!!.onClick(position,color)
             }
         }
     }
 
     //for clicking recycler view items
     fun setOnClickListener(onClickListener: onClickInterface){
-        this.onClickListener=onClickListener
+        this._onClickListener=onClickListener
     }
 
     interface onClickInterface{
