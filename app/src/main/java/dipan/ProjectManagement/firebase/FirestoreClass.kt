@@ -6,6 +6,7 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import dipan.ProjectManagement.activities.CardDetailsActivity
 import dipan.ProjectManagement.activities.CreateBoardActivity
 import dipan.ProjectManagement.activities.MainActivity
 import dipan.ProjectManagement.activities.MembersActivity
@@ -190,7 +191,20 @@ class FirestoreClass {
     //this function opens up the current board
     //each board has a list of task
     //this function directly updates the hashmap -> create update delete everything
-    fun addUpdateTaskList(activity: TaskListActivity,board:Board){
+
+    //UPDATE: we are updating the activity type from TaskListActivity to any activity
+    //earlier we were only updating the task list -> adding, updating or deleting old task
+    //now we want to edit the cards also
+    //cards are what -> inside the task list
+    //task list are inside the board
+
+    //earlier to update the board -> we were passing the entire edited board
+    //this time also do the same
+    //cause editCardDetails has got the information of the entire parent board
+
+    //we will update the taskList only inside and then pass it here
+
+    fun addUpdateTaskList(activity: Activity,board:Board){
         val taskListHashMap=HashMap<String,Any>()
         taskListHashMap[Constants.TASK_LIST]=board.taskList//this is the updated task list
 
@@ -199,11 +213,26 @@ class FirestoreClass {
             .update(taskListHashMap)//replace the prev hash map with the new one
             .addOnSuccessListener {
                 Log.e("FireStoreSuccess","Task List updated successfully")
-                activity.addUpdateTaskListSuccess()
+
+                //if the activity is TaskListActivity
+                if(activity is TaskListActivity){
+                    activity.addUpdateTaskListSuccess()
+                }
+                else if(activity is CardDetailsActivity){
+                    activity.addUpdateTaskListSuccess()
+                }
+
+
             }
             .addOnFailureListener {
                 e->
-                activity.hideProgressDialog()
+                if(activity is TaskListActivity){
+                    activity.hideProgressDialog()
+                }
+                else if(activity is CardDetailsActivity){
+                    activity.hideProgressDialog()
+                }
+
                 Log.e("FireStoreError", "Error while adding the task list", e)
             }
     }
