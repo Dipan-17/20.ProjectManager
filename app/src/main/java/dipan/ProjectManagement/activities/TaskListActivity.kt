@@ -28,6 +28,7 @@ class TaskListActivity : BaseActivity() {
     //we want to update our taskListActivity when we come back from members activity
     companion object{
         const val MEMBERS_REQUEST_CODE:Int=14
+        const val CARD_DETAILS_UPDATE_REQUEST_CODE:Int=15
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -191,7 +192,7 @@ class TaskListActivity : BaseActivity() {
     }
 
 
-    //for cards
+    //This is called when we click on a card in the task list
     fun cardDetails(taskListPosition:Int,cardPosition:Int){
        //taskListPosition -> position of the task list
         //cardPosition -> current card inside the task list
@@ -201,9 +202,8 @@ class TaskListActivity : BaseActivity() {
         intent.putExtra(Constants.TASK_LIST_ITEM_POSITION,taskListPosition) //position of the task list
         intent.putExtra(Constants.CARD_LIST_ITEM_POSITION,cardPosition) //position of the card
 
-        startActivity(intent)
-
-
+        //we want to load only if updated
+        startActivityForResult(intent, CARD_DETAILS_UPDATE_REQUEST_CODE)
     }
 
 
@@ -216,7 +216,15 @@ class TaskListActivity : BaseActivity() {
             //reload the board
             showProgressDialog(resources.getString(R.string.please_wait))
             FirestoreClass().getBoardDetails(this,mBoardDetails.documentId)
-        }else{
+        }
+        else if(resultCode==Activity.RESULT_OK && requestCode== CARD_DETAILS_UPDATE_REQUEST_CODE){
+            //reload the board
+            //i.e refresh the page
+            showProgressDialog(resources.getString(R.string.please_wait))
+            FirestoreClass().getBoardDetails(this,mBoardDetails.documentId)
+        }
+
+        else{
             Log.e("Cancelled","Cancelled")
         }
     }
