@@ -1,10 +1,15 @@
 package dipan.ProjectManagement.activities
 
+import android.app.Dialog
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.graphics.toColorInt
 import androidx.recyclerview.widget.LinearLayoutManager
 import dipan.ProjectManagement.R
@@ -77,4 +82,55 @@ class MembersActivity : BaseActivity() {
 
 
     }
+
+
+    //set the menu options to add the members
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_add_member,menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+    //onclick of menu options
+    override fun onOptionsItemSelected(item: android.view.MenuItem): Boolean {
+        when(item.itemId){
+            membersBinding?.toolbarMembersActivity.let{R.id.action_add_member}->{
+                //display the dialogue
+                dialogueAddMember()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun dialogueAddMember() {
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.dialog_add_member)
+
+        val tvAdd = dialog.findViewById<TextView>(R.id.tv_add)
+        val tvCancel = dialog.findViewById<TextView>(R.id.tv_cancel)
+
+        tvAdd.setOnClickListener {
+            // Handle add button click
+            val email = dialog.findViewById<TextView>(R.id.et_email_search_member).text.toString()
+
+            if(email.isNotEmpty()) {
+                dialog.dismiss()
+                //showProgressDialog(resources.getString(R.string.please_wait))
+                //FirestoreClass().getMemberDetails(this@MembersActivity,email)
+
+                //TODO
+            }
+            else{
+                //Toast.makeText(this@MembersActivity,"Please enter email address",Toast.LENGTH_SHORT).show()
+                showErrorSnackBar("Please enter email address")
+            }
+        }
+
+        tvCancel.setOnClickListener {
+            // Handle cancel button click
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
 }
