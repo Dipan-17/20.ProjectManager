@@ -7,6 +7,7 @@ data class Card(
     val name: String,
     val createdBy: String,
     val assignedTo: ArrayList<String>,
+    var labelColor: String = "#FFFFFF"
 ): Parcelable {
     constructor() : this("", "", ArrayList())
     constructor(parcel: Parcel) : this(

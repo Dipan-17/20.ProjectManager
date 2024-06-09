@@ -28,7 +28,7 @@ class CardDetailsActivity : BaseActivity() {
     private var mCardListPosition:Int=-1
 
     //card color
-    private var mSelectedColor:String=""
+    private var mSelectedColor:String="FFFFFF"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,7 +104,9 @@ class CardDetailsActivity : BaseActivity() {
         val card=Card(
             cardDetailsBinding?.etNameCardDetails?.text.toString(),
             mBoardDetails.taskList[mTaskListPosition].card[mCardListPosition].createdBy,
-            mBoardDetails.taskList[mTaskListPosition].card[mCardListPosition].assignedTo
+            mBoardDetails.taskList[mTaskListPosition].card[mCardListPosition].assignedTo,
+            mSelectedColor
+
         )
 
         //assign the new card in the position of the old card
