@@ -13,6 +13,8 @@ import dipan.ProjectManagement.databinding.ItemCardBinding
 import dipan.ProjectManagement.models.Board
 import dipan.ProjectManagement.models.Card
 import dipan.ProjectManagement.models.SelectedMembers
+import java.text.SimpleDateFormat
+import java.util.Date
 
 open class CardListItemAdapter(val context: Context,
                                val cardList:List<Card>):
@@ -25,6 +27,19 @@ open class CardListItemAdapter(val context: Context,
         //where do we get data
         fun bindItem(card:Card){
             itemBinding?.tvCardName?.text=card.name
+
+            if(card.dueDate>0){
+                val dueDateInLong:Long=card.dueDate
+                val sdf = SimpleDateFormat("dd/MM/yyyy")
+                val dueDate = sdf.format(Date(dueDateInLong))
+                itemBinding.tvDueDate.text = dueDate
+
+                itemBinding.tvDueDate.visibility= View.VISIBLE
+
+            }else{
+                itemBinding.tvDueDate.visibility= View.GONE
+            }
+
 
             //set the color of the card
             val cardColor=card.labelColor

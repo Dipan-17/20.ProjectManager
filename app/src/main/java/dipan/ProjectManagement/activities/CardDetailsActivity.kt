@@ -2,6 +2,7 @@ package dipan.ProjectManagement.activities
 
 import MembersListDialog
 import android.app.Activity
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
@@ -23,6 +24,9 @@ import dipan.ProjectManagement.models.SelectedMembers
 import dipan.ProjectManagement.models.Task
 import dipan.ProjectManagement.models.User
 import dipan.ProjectManagement.utils.Constants
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 class CardDetailsActivity : BaseActivity() {
 
@@ -40,6 +44,9 @@ class CardDetailsActivity : BaseActivity() {
     //card color
     private var mSelectedColor:String="FFFFFF"
 
+    //due date
+    private var mSelectedDueDateMilliSeconds:Long=0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         cardDetailsBinding = ActivityCardDetailsBinding.inflate(layoutInflater)
@@ -50,6 +57,7 @@ class CardDetailsActivity : BaseActivity() {
 
         //set the toolbar and edit text name to the existing name
         //set the color to existing
+        //set date to existing
         var currentCard=mBoardDetails.taskList[mTaskListPosition].card[mCardListPosition]//these are indexes only -> not one based
         setupToolbar(currentCard.name)
         cardDetailsBinding?.etNameCardDetails?.setText(currentCard.name)
@@ -62,6 +70,15 @@ class CardDetailsActivity : BaseActivity() {
         if(mSelectedColor.isNotEmpty()){
             setColor()
         }
+
+        //original date
+        mSelectedDueDateMilliSeconds=currentCard.dueDate
+        if(mSelectedDueDateMilliSeconds>0){
+            val sdf= SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
+            val selectedDate=sdf.format(mSelectedDueDateMilliSeconds)
+            cardDetailsBinding?.tvSelectDueDate?.text=selectedDate
+        }
+
 
         //update button
         cardDetailsBinding?.btnUpdateCardDetails?.setOnClickListener {
@@ -83,6 +100,13 @@ class CardDetailsActivity : BaseActivity() {
         cardDetailsBinding?.tvSelectMembers?.setOnClickListener {
             membersListDialog()
         }
+
+        //date
+        cardDetailsBinding?.tvSelectDueDate?.setOnClickListener {
+            showDatePicker()
+        }
+
+
 
         //members display
         setupSelectedMembersList()
@@ -131,7 +155,8 @@ class CardDetailsActivity : BaseActivity() {
             cardDetailsBinding?.etNameCardDetails?.text.toString(),
             mBoardDetails.taskList[mTaskListPosition].card[mCardListPosition].createdBy,
             mBoardDetails.taskList[mTaskListPosition].card[mCardListPosition].assignedTo,
-            mSelectedColor
+            mSelectedColor,
+            mSelectedDueDateMilliSeconds
 
         )
 
@@ -349,8 +374,39 @@ class CardDetailsActivity : BaseActivity() {
 
         }
 
+    }
 
 
+    //date picker
+    private fun showDatePicker(){
+        val c = Calendar.getInstance()
+        val year = c.get(Calendar.YEAR)
+        val month = c.get(Calendar.MONTH)
+        val day = c.get(Calendar.DAY_OF_MONTH)
+
+        val dpd = DatePickerDialog(
+            this,
+            DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+                val sDayOfMonth = if(dayOfMonth < 10) "0$dayOfMonth" else "$dayOfMonth"
+                val sMonthOfYear = if(month < 10) "0${month + 1}" else "${month + 1}"
+                val selectedDate = "$sDayOfMonth/$sMonthOfYear/$year"
+
+                //set in the text view
+                cardDetailsBinding?.tvSelectDueDate?.text = selectedDate
+
+                val sdf = java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.ENGLISH)
+                val theDate = sdf.parse(selectedDate)
+                mSelectedDueDateMilliSeconds = theDate!!.time
+            },
+            year,
+            month,
+            day
+        )
+
+        // Set the DatePickerDialog to not show dates before today
+        dpd.datePicker.minDate = System.currentTimeMillis()
+
+        dpd.show()
     }
 
 
