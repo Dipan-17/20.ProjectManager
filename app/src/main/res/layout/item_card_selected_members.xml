@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
-    android:padding="5dp"
     android:gravity="center"
-    >
+    android:orientation="horizontal"
+    android:padding="5dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        if="@+id/civ_selected_member_image"
+        android:id="@+id/civ_selected_member_image"
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:src="@drawable/ic_person_placeholder_black"
@@ -23,9 +23,9 @@
         />
 
     <de.hdodenhof.circleimageview.CircleImageView
-        if="@+id/civ_add_member"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:id="@+id/civ_add_member"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:src="@drawable/ic_add_blue_24dp"
         android:visibility="visible"
         app:civ_border_color="@color/colorAccent"

@@ -7,15 +7,19 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.graphics.toColorInt
+import androidx.recyclerview.widget.GridLayoutManager
 import dipan.ProjectManagement.R
+import dipan.ProjectManagement.adapters.CardMemberListItemsAdapter
 import dipan.ProjectManagement.databinding.ActivityCardDetailsBinding
 import dipan.ProjectManagement.dialogs.LabelColorListDialog
 import dipan.ProjectManagement.firebase.FirestoreClass
 import dipan.ProjectManagement.models.Board
 import dipan.ProjectManagement.models.Card
+import dipan.ProjectManagement.models.SelectedMembers
 import dipan.ProjectManagement.models.Task
 import dipan.ProjectManagement.models.User
 import dipan.ProjectManagement.utils.Constants
@@ -256,7 +260,7 @@ class CardDetailsActivity : BaseActivity() {
             resources.getString(R.string.str_select_members)
         ){
             override fun onItemSelected(user: User, action: String) {
-                TODO("Not yet implemented")
+                Toast.makeText(this@CardDetailsActivity,user.name,Toast.LENGTH_SHORT).show()
             }
 
         }
@@ -265,6 +269,55 @@ class CardDetailsActivity : BaseActivity() {
     }
 
 
+
+    //rv adapter
+    private fun setupSelectedMembersList(){
+        val cardAssignedMembersList =
+            mBoardDetails.taskList[mTaskListPosition].card[mCardListPosition].assignedTo
+
+        val selectedMembersList:ArrayList<SelectedMembers> = ArrayList()
+
+        if(cardAssignedMembersList.size>0){//comes from the card -> all ids of card members
+            for(i in mMembersList.indices){//all members of the board -> user model
+                for(j in cardAssignedMembersList){
+                    if(mMembersList[i].id==j){
+                        val selectedMember=SelectedMembers(
+                            mMembersList[i].id,
+                            mMembersList[i].image
+                        )
+                        selectedMembersList.add(selectedMember)
+                    }
+                }
+            }
+        }
+
+        if(selectedMembersList.size>0){
+            selectedMembersList.add(SelectedMembers("",""))//add the last item -> add button
+            cardDetailsBinding?.tvSelectMembers?.visibility=View.GONE
+            cardDetailsBinding?.rvSelectedMembersList?.visibility=View.VISIBLE
+
+
+            val adapter=CardMemberListItemsAdapter(this,selectedMembersList)
+            cardDetailsBinding?.rvSelectedMembersList?.adapter= adapter
+            cardDetailsBinding?.rvSelectedMembersList?.layoutManager= GridLayoutManager(this,6)
+
+            adapter.setOnItemClickListener(object:CardMemberListItemsAdapter.OnItemClickListener{
+                override fun onItemClick() {
+                    //this function was called if we click on select members tv
+                    //if there are members in the list -> hide the tv
+                    //so to access it click on any item
+                    membersListDialog()
+                }
+            })
+        }else{
+            cardDetailsBinding?.tvSelectMembers?.visibility=View.VISIBLE
+            cardDetailsBinding?.rvSelectedMembersList?.visibility=View.GONE
+
+        }
+
+
+
+    }
 
 
 
