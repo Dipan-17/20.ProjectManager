@@ -1,5 +1,6 @@
 package dipan.ProjectManagement.activities
 
+import MembersListDialog
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
@@ -28,6 +29,7 @@ class CardDetailsActivity : BaseActivity() {
     private  var mTaskListPosition:Int=-1
     private var mCardListPosition:Int=-1
 
+    //all the members of the current "board"
     private lateinit var mMembersList : ArrayList<User>
 
     //card color
@@ -72,6 +74,10 @@ class CardDetailsActivity : BaseActivity() {
             labelColorListDialog()
         }
 
+        //member list
+        cardDetailsBinding?.tvSelectMembers?.setOnClickListener {
+            membersListDialog()
+        }
 
     }
 
@@ -222,6 +228,44 @@ class CardDetailsActivity : BaseActivity() {
         }
         listDialog.show()
     }
+
+    //members list
+    private fun membersListDialog() {
+        //user ids of all the members of the "CARD"
+        val cardAssignedMembersList =
+            mBoardDetails.taskList[mTaskListPosition].card[mCardListPosition].assignedTo
+
+        if (cardAssignedMembersList.size > 0) {
+            for (i in mMembersList.indices) {//for all members in the board
+                for (j in cardAssignedMembersList) {//check each card -> if it is assigned to the member
+                    if (mMembersList[i].id == j) {
+                        mMembersList[i].selected = true
+                    }
+                }
+            }
+        }else{
+            for(i in mMembersList.indices){
+                mMembersList[i].selected=false
+            }
+
+        }
+
+        val listDialog=object:MembersListDialog(
+            this,
+            mMembersList,
+            resources.getString(R.string.str_select_members)
+        ){
+            override fun onItemSelected(user: User, action: String) {
+                TODO("Not yet implemented")
+            }
+
+        }
+
+        listDialog.show()
+    }
+
+
+
 
 
     //setup toolbar

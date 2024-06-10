@@ -9,7 +9,8 @@ data class User(
     val email: String = "",
     val image: String = "", //location of the image
     val mobile: Long = 0,
-    val fcmToken: String = ""
+    val fcmToken: String = "",
+    var selected: Boolean = false
 ):Parcelable{
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
@@ -17,7 +18,8 @@ data class User(
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readLong(),
-        parcel.readString()!!
+        parcel.readString()!!,
+        parcel.readByte() != 0.toByte()
     ) {
     }
 
@@ -28,6 +30,7 @@ data class User(
         parcel.writeString(image)
         parcel.writeLong(mobile)
         parcel.writeString(fcmToken)
+        parcel.writeByte(if (selected) 1 else 0)
     }
 
     override fun describeContents() = 0

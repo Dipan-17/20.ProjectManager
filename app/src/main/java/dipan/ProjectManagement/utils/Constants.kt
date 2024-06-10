@@ -39,6 +39,10 @@ object Constants {
     //to pass the member list
     const val BOARD_MEMBERS_LIST:String="board_members_lisr"
 
+    //for selecting and deselcting the members inside card details
+    const val SELECT:String="select"
+    const val UNSELECT:String="unselect"
+
     //to get card details for editing the card inside card details activity
     const val TASK_LIST_ITEM_POSITION="taskListItemPosition"
     const val CARD_LIST_ITEM_POSITION="cardListItemPosition"

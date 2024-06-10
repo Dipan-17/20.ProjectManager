@@ -6,7 +6,7 @@ import android.os.Parcelable
 data class Card(
     val name: String,
     val createdBy: String,
-    val assignedTo: ArrayList<String>,
+    val assignedTo: ArrayList<String>, //user id only
     var labelColor: String = "#FFFFFF"
 ): Parcelable {
     constructor() : this("", "", ArrayList())
