@@ -34,6 +34,7 @@ class CardDetailsActivity : BaseActivity() {
     private var mCardListPosition:Int=-1
 
     //all the members of the current "board"
+    //get from intent
     private lateinit var mMembersList : ArrayList<User>
 
     //card color
@@ -262,7 +263,33 @@ class CardDetailsActivity : BaseActivity() {
             resources.getString(R.string.str_select_members)
         ){
             override fun onItemSelected(user: User, action: String) {
-                Toast.makeText(this@CardDetailsActivity,user.name,Toast.LENGTH_SHORT).show()
+                if(action == Constants.SELECT){
+                    //if not already present -> add the user id to the card
+                    if(!mBoardDetails.taskList[mTaskListPosition].card[mCardListPosition].assignedTo.contains(user.id)){
+                        mBoardDetails.taskList[mTaskListPosition].card[mCardListPosition].assignedTo.add(user.id)
+                        Toast.makeText(this@CardDetailsActivity,"Successfully assigned",Toast.LENGTH_SHORT).show()
+                    }else{
+                        Toast.makeText(this@CardDetailsActivity,"The member is already assigned",Toast.LENGTH_SHORT).show()
+                    }
+                }else{
+                    //remove the user id from the card
+                    mBoardDetails.taskList[mTaskListPosition].card[mCardListPosition].assignedTo.remove(user.id)
+                    Toast.makeText(this@CardDetailsActivity,"Successfully removed",Toast.LENGTH_SHORT).show()
+
+                    for(i in mMembersList.indices){
+                       if(mMembersList[i].id==user.id){
+                           mMembersList[i].selected=false
+                       }
+                    }
+                }
+                //update the rv
+                setupSelectedMembersList()
+
+                //we do not update in database => we update only when we update the card
+                //i.e only when update button is pressed
+                //we are making all channges in the local board object
+                //on clicking update we update the entire board in the database
+
             }
 
         }
