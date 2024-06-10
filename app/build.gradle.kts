@@ -67,5 +67,7 @@ dependencies {
     //dexter
     implementation("com.karumi:dexter:6.0.1")
 
+    //firebase messagin dependency
+    implementation("com.google.firebase:firebase-messaging:23.0.0")
 
 }

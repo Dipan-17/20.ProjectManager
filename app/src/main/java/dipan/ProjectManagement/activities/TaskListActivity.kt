@@ -243,6 +243,20 @@ class TaskListActivity : BaseActivity() {
     }
 
 
+    //dragging cards
+    fun updateCardInTaskList(taskListPosition: Int, cards: ArrayList<Card>){
+        mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size-1) //remove the last item -> add button
+
+        mBoardDetails.taskList[taskListPosition].card=cards
+
+
+        //use the old update function only -> now the board is updated
+        showProgressDialog(resources.getString(R.string.please_wait))
+        FirestoreClass().addUpdateTaskList(this,mBoardDetails)
+    }
+
+
+
     //to reload activity if any changes were made
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

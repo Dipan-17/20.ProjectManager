@@ -1,5 +1,6 @@
 package dipan.ProjectManagement.adapters
 
+import android.annotation.SuppressLint
 import android.content.Context
 
 
@@ -9,21 +10,24 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import dipan.ProjectManagement.R
 import dipan.ProjectManagement.activities.TaskListActivity
 import dipan.ProjectManagement.databinding.ItemTaskBinding
-import dipan.ProjectManagement.models.Board
 import dipan.ProjectManagement.models.Task
+import java.util.Collections
 
 open class TaskListItemAdapter(private val context: Context,
                                private val list: ArrayList<Task>):
 
     RecyclerView.Adapter<TaskListItemAdapter.MainViewHolder>() {
 
-
+    //for dragging
+        private var mPositionDraggedFrom = -1
+        private var mPositionDraggedTo = -1
     inner class MainViewHolder(val itemBinding: ItemTaskBinding):RecyclerView.ViewHolder(itemBinding.root){
         //bind the data to the card
         fun bindItem(model: Task){
@@ -48,7 +52,7 @@ open class TaskListItemAdapter(private val context: Context,
         return holder
     }
 
-    override fun onBindViewHolder(holder: TaskListItemAdapter.MainViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: TaskListItemAdapter.MainViewHolder, @SuppressLint("RecyclerView") position: Int) {
         val model=list[position]
 
         //WHAT TO DISPLAY
@@ -78,13 +82,13 @@ open class TaskListItemAdapter(private val context: Context,
         }
 
         //cancel adding a new task
-        holder?.itemBinding?.ibCloseListName?.setOnClickListener {
+        holder.itemBinding.ibCloseListName.setOnClickListener {
             holder.itemBinding.tvAddTaskList.visibility=View.VISIBLE
             holder.itemBinding.cvAddTaskListName.visibility=View.GONE
         }
 
         //agreed to creating a new task
-        holder?.itemBinding?.ibDoneListName?.setOnClickListener {
+        holder.itemBinding.ibDoneListName.setOnClickListener {
             val listName=holder.itemBinding.etTaskListName.text.toString()
             if(listName.isNotEmpty()){
                 if(context is TaskListActivity) {
@@ -181,6 +185,56 @@ open class TaskListItemAdapter(private val context: Context,
 
         //parent holder
         holder.bindItem(model)
+
+
+
+
+        //for drag and drop
+        val dividerItemDecoration= DividerItemDecoration(context,LinearLayoutManager.VERTICAL)
+        holder.itemBinding.rvCardList.addItemDecoration(dividerItemDecoration)
+
+        val touchHelper = ItemTouchHelper(
+            object : ItemTouchHelper.SimpleCallback(
+                ItemTouchHelper.UP or ItemTouchHelper.DOWN,
+                0
+            ) {
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    dragged: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean {
+                    val draggedPosition = dragged.adapterPosition
+                    val targetPosition = target.adapterPosition
+
+                    if(mPositionDraggedFrom==-1)mPositionDraggedFrom=draggedPosition
+
+                    if(mPositionDraggedTo==-1)mPositionDraggedTo=targetPosition
+
+                    //swap the cards
+                    Collections.swap(list[position].card,draggedPosition,targetPosition)
+                    cardAdapter?.notifyItemMoved(draggedPosition,targetPosition)
+
+                    return false
+                }
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    //not needed
+                }
+
+                override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
+                    super.clearView(recyclerView, viewHolder)
+
+                    if(mPositionDraggedFrom!=-1 && mPositionDraggedTo!=-1 && mPositionDraggedFrom!=mPositionDraggedTo){
+                        (context as TaskListActivity).updateCardInTaskList(position,list[position].card)
+                    }
+
+                    mPositionDraggedFrom=-1
+                    mPositionDraggedTo=-1
+                }
+            }
+        )
+
+        touchHelper.attachToRecyclerView(holder.itemBinding.rvCardList)
     }
 
     override fun getItemCount(): Int {
