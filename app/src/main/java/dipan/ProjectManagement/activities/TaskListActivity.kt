@@ -26,7 +26,7 @@ class TaskListActivity : BaseActivity() {
     //retrieve the board document id
     private lateinit var mBoardDocumentId:String
 
-    private lateinit var mAssignedMembersDetailList:ArrayList<User>
+    lateinit var mAssignedMembersDetailList:ArrayList<User>
 
     //we want to update our taskListActivity when we come back from members activity
     companion object{
@@ -65,18 +65,21 @@ class TaskListActivity : BaseActivity() {
         //setup toolbar with the doc name
         setupToolbar(board.name)
 
+
+        //this part added below after some updates
+
         //just to show the in the UI => This is used as empty list don't look good
         //this is later used in the adapter as an add button
-        val addTaskList=Task(resources.getString(R.string.add_list))
-        board.taskList.add(addTaskList)
-
-        //set the adapter
-        taskListBinding?.rvTaskList?.setHasFixedSize(true)
-        taskListBinding?.rvTaskList?.layoutManager=LinearLayoutManager(this@TaskListActivity,
-            LinearLayoutManager.HORIZONTAL,false)
-
-        val adapter= TaskListItemAdapter(this,board.taskList)
-        taskListBinding?.rvTaskList?.adapter=adapter
+//        val addTaskList=Task(resources.getString(R.string.add_list))
+//        board.taskList.add(addTaskList)
+//
+//        //set the adapter
+//        taskListBinding?.rvTaskList?.setHasFixedSize(true)
+//        taskListBinding?.rvTaskList?.layoutManager=LinearLayoutManager(this@TaskListActivity,
+//            LinearLayoutManager.HORIZONTAL,false)
+//
+//        val adapter= TaskListItemAdapter(this,board.taskList)
+//        taskListBinding?.rvTaskList?.adapter=adapter
 
 
         //for members name from the user ID by passing the assignedTo list from the board
@@ -217,8 +220,24 @@ class TaskListActivity : BaseActivity() {
         startActivityForResult(intent, CARD_DETAILS_UPDATE_REQUEST_CODE)
     }
 
+    //each board ka members show ho
     fun boardMemberDetailsList(list: List<User>){
         mAssignedMembersDetailList= list as ArrayList<User>
+
+        //just to show the in the UI => This is used as empty list don't look good
+        //this is later used in the adapter as an add button
+        val addTaskList=Task(resources.getString(R.string.add_list))
+        mBoardDetails.taskList.add(addTaskList)
+
+        //set the adapter
+        taskListBinding?.rvTaskList?.setHasFixedSize(true)
+        taskListBinding?.rvTaskList?.layoutManager=LinearLayoutManager(this@TaskListActivity,
+            LinearLayoutManager.HORIZONTAL,false)
+
+        val adapter= TaskListItemAdapter(this,mBoardDetails.taskList)
+        taskListBinding?.rvTaskList?.adapter=adapter
+
+
         hideProgressDialog()
 
     }

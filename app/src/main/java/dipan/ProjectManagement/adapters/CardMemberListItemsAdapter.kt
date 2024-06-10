@@ -12,7 +12,8 @@ import dipan.ProjectManagement.models.SelectedMembers
 
 open class CardMemberListItemsAdapter(
     private val context: Context,
-    private val list: ArrayList<SelectedMembers>
+    private val list: ArrayList<SelectedMembers>,
+    private val assignMembers: Boolean
 ): RecyclerView.Adapter<CardMemberListItemsAdapter.MainViewHolder>() {
 
     private var listener: OnItemClickListener? = null
@@ -46,7 +47,10 @@ open class CardMemberListItemsAdapter(
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
         val model= list[position]
 
-        if(position == list.size-1){//this is the last item -> empty item -> the + icon
+        //assign members variable is used cause we are using the same adapter for both assign members and members list
+        //members list -> in task list inside individual card -> we dont want the plus to show
+        //assign members -> in card details activity -> we want the plus to show
+        if(position == list.size-1 && assignMembers){//this is the last item -> empty item -> the + icon
             holder.itemBinding.civSelectedMemberImage.visibility = android.view.View.GONE
             holder.itemBinding.civAddMember.visibility = android.view.View.VISIBLE
         }else{
