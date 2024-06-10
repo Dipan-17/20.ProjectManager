@@ -27,7 +27,8 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:padding="@dimen/item_member_content_padding">
+            android:padding="@dimen/item_member_content_padding"
+            >
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/iv_member_image"
@@ -42,7 +43,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/item_member_detail_layout_marginStart"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_weight="1"
+                >
 
                 <TextView
                     android:id="@+id/tv_member_name"
