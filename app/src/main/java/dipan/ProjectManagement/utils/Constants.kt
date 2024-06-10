@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
 import android.webkit.MimeTypeMap
-import dipan.ProjectManagement.activities.MyProfileActivity
 
 object Constants {
     //collections in firestore
@@ -51,6 +50,13 @@ object Constants {
     //permission codes
     const val READ_STORAGE_PERMISSION_CODE=1
     const val PICK_IMAGE_REQUEST_CODE=2
+
+
+    //for storing tokens in shared preferences & notifications
+    const val PROJECT_MANAGER_PREFERENCES: String="ProjectManagementPrefs"
+    const val FCM_TOKEN_UPDATED:String="fcmTokenUpdated"
+    const val FCM_TOKEN:String="fcmToken"
+
 
 
     //helper functions

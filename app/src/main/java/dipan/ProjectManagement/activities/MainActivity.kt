@@ -2,6 +2,7 @@ package dipan.ProjectManagement.activities
 
 import android.app.Activity
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import androidx.core.graphics.toColorInt
@@ -9,6 +10,7 @@ import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.messaging.FirebaseMessaging
 import dipan.ProjectManagement.R
 import dipan.ProjectManagement.adapters.BoardItemsAdapter
 import dipan.ProjectManagement.databinding.ActivityMainBinding
@@ -27,6 +29,9 @@ class MainActivity : BaseActivity() {
 
     private lateinit var mUserName:String//to know who created the board
 
+    //storing token in shared pref
+    private lateinit var mSharedPreferences: SharedPreferences
+
     companion object{
         const val MY_PROFILE_REQUEST_CODE:Int=11
         const val CREATE_BOARD_REQUEST_CODE:Int=12
@@ -40,12 +45,30 @@ class MainActivity : BaseActivity() {
         appBarBinding= AppBarMainBinding.bind(mainBinding?.drawerAppBar?.root!!)
         mainContentBinding= MainContentBinding.bind(mainBinding?.drawerAppBar?.mainContent?.root!!)
 
+
+        //storing token in shared pref
+        mSharedPreferences=this.getSharedPreferences(Constants.PROJECT_MANAGER_PREFERENCES,MODE_PRIVATE)
+
+        //update the token:
+        //if the token is updated -> just load the user data
+        //else update the token and then load the user data
+        val tokenUpdated=mSharedPreferences.getBoolean(Constants.FCM_TOKEN_UPDATED,false) //default is false
+
+        if(tokenUpdated){
+            showProgressDialog(resources.getString(R.string.please_wait))
+            FirestoreClass().loadUserData(this,true)
+        }else{
+            FirebaseMessaging.getInstance().token.addOnSuccessListener(this@MainActivity){ token->
+                updateFCMToken(token)
+            }
+        }
+
         //set action bar
         setUpActionBar()
 
 
         //set navigation drawer details
-        FirestoreClass().loadUserData(this,true)//first time we should read the boards list
+        //FirestoreClass().loadUserData(this,true)//first time we should read the boards list
 
 
         //side drawer ke buttons ke on click listeners
@@ -57,6 +80,8 @@ class MainActivity : BaseActivity() {
                     true
                 }
                 R.id.nav_signOut -> {
+                    mSharedPreferences.edit().clear().apply()
+
                     FirebaseAuth.getInstance().signOut()
                     showErrorSnackBar("Successfully Signed out")
                     val intent= Intent(this@MainActivity,IntroActivity::class.java)
@@ -79,6 +104,7 @@ class MainActivity : BaseActivity() {
             intent.putExtra(Constants.NAME,mUserName)
             startActivityForResult(intent, CREATE_BOARD_REQUEST_CODE)
         }
+
 
 
     }
@@ -160,6 +186,8 @@ class MainActivity : BaseActivity() {
 
     //side ke drawer main details update -> called by firestore class after successfully retrieving user info
     fun updateNavigationUserDetails(user: User,readBoardsList:Boolean){
+        hideProgressDialog()
+
         val navView=mainBinding?.navView// Get a reference to the NavigationView
         val headerView=navView?.getHeaderView(0) // Get a reference to the header view
         val headerBinding = headerView?.let { NavHeaderMainBinding.bind(it) }// Bind the header view
@@ -187,6 +215,29 @@ class MainActivity : BaseActivity() {
 
     }
 
+
+    //called on success of update profile
+    //we get the token when users registers or logs in
+    fun tokenUpdateSuccess() {
+        hideProgressDialog()
+        val editor: SharedPreferences.Editor = mSharedPreferences.edit()
+        editor.putBoolean(Constants.FCM_TOKEN_UPDATED, true)
+        editor.apply()
+
+        //reload the screen
+        showProgressDialog(resources.getString(R.string.please_wait))
+        FirestoreClass().loadUserData(this,true)
+
+    }
+
+    private fun updateFCMToken(token:String){
+        val userHashMap=HashMap<String,Any>()
+        userHashMap[Constants.FCM_TOKEN]=token
+        showProgressDialog(resources.getString(R.string.please_wait))
+        //update the token in firestore
+        FirestoreClass().updateUserProfileData(this,userHashMap)
+    }
+
     override fun onBackPressed() {
 
         if(mainBinding?.drawerLayout?.isDrawerOpen(GravityCompat.START) == true){
@@ -197,6 +248,8 @@ class MainActivity : BaseActivity() {
         super.onBackPressed()
 
     }
+
+
 
 
 }

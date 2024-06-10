@@ -79,7 +79,7 @@ class FirestoreClass {
 
 
     //function to updateProfile once update pressed
-    fun updateUserProfileData(activity: MyProfileActivity,
+    fun updateUserProfileData(activity: Activity,
                               userHashMap: HashMap<String, Any>) {
         //in fire store
         //there is a table -> collection
@@ -94,10 +94,25 @@ class FirestoreClass {
             .addOnSuccessListener {
                 Log.e("Firebase","Profile data updated successfully")
                 //Toast.makeText(activity,"Profile updated successfully",Toast.LENGTH_SHORT).show()
-                activity.profileUpdateSuccess()
+                when(activity){
+                    is MyProfileActivity ->{
+                        activity.profileUpdateSuccess()
+                    }
+                    is MainActivity ->{
+                        activity.tokenUpdateSuccess()
+                    }
+                }
+
             }
             .addOnFailureListener { e ->
-                activity.hideProgressDialog()
+                when(activity){
+                    is MyProfileActivity ->{
+                        activity.hideProgressDialog()
+                    }
+                    is MainActivity ->{
+                        activity.hideProgressDialog()
+                    }
+                }
                 Log.e("Firebase", "Error while updating the user details.", e)
                 Toast.makeText(activity,"Error in updating profile",Toast.LENGTH_SHORT).show()
             }
