@@ -16,6 +16,7 @@ import dipan.ProjectManagement.firebase.FirestoreClass
 import dipan.ProjectManagement.models.Board
 import dipan.ProjectManagement.models.Card
 import dipan.ProjectManagement.models.Task
+import dipan.ProjectManagement.models.User
 import dipan.ProjectManagement.utils.Constants
 
 class CardDetailsActivity : BaseActivity() {
@@ -26,6 +27,8 @@ class CardDetailsActivity : BaseActivity() {
     private lateinit var mBoardDetails:Board
     private  var mTaskListPosition:Int=-1
     private var mCardListPosition:Int=-1
+
+    private lateinit var mMembersList : ArrayList<User>
 
     //card color
     private var mSelectedColor:String="FFFFFF"
@@ -82,6 +85,9 @@ class CardDetailsActivity : BaseActivity() {
         }
         if(intent.hasExtra(Constants.CARD_LIST_ITEM_POSITION)){
             mCardListPosition=intent.getIntExtra(Constants.CARD_LIST_ITEM_POSITION,-1)
+        }
+        if(intent.hasExtra(Constants.BOARD_MEMBERS_LIST)){
+            mMembersList=intent.getParcelableArrayListExtra<User>(Constants.BOARD_MEMBERS_LIST)!!
         }
     }
 

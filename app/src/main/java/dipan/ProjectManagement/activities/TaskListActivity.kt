@@ -15,6 +15,7 @@ import dipan.ProjectManagement.firebase.FirestoreClass
 import dipan.ProjectManagement.models.Board
 import dipan.ProjectManagement.models.Card
 import dipan.ProjectManagement.models.Task
+import dipan.ProjectManagement.models.User
 import dipan.ProjectManagement.utils.Constants
 
 class TaskListActivity : BaseActivity() {
@@ -24,6 +25,8 @@ class TaskListActivity : BaseActivity() {
 
     //retrieve the board document id
     private lateinit var mBoardDocumentId:String
+
+    private lateinit var mAssignedMembersDetailList:ArrayList<User>
 
     //we want to update our taskListActivity when we come back from members activity
     companion object{
@@ -74,7 +77,12 @@ class TaskListActivity : BaseActivity() {
 
         val adapter= TaskListItemAdapter(this,board.taskList)
         taskListBinding?.rvTaskList?.adapter=adapter
-        //adapter.notifyDataSetChanged()
+
+
+        //for members name from the user ID by passing the assignedTo list from the board
+        //this is called on success of board retrieval only
+        showProgressDialog(resources.getString(R.string.please_wait))
+        FirestoreClass().getAssignedMemberListDetails(this,mBoardDetails.assignedTo)
 
     }
 
@@ -202,11 +210,18 @@ class TaskListActivity : BaseActivity() {
         intent.putExtra(Constants.TASK_LIST_ITEM_POSITION,taskListPosition) //position of the task list
         intent.putExtra(Constants.CARD_LIST_ITEM_POSITION,cardPosition) //position of the card
 
+        //pass the member list
+        intent.putExtra(Constants.BOARD_MEMBERS_LIST,mAssignedMembersDetailList) //name of users
+
         //we want to load only if updated
         startActivityForResult(intent, CARD_DETAILS_UPDATE_REQUEST_CODE)
     }
 
+    fun boardMemberDetailsList(list: List<User>){
+        mAssignedMembersDetailList= list as ArrayList<User>
+        hideProgressDialog()
 
+    }
 
 
     //to reload activity if any changes were made

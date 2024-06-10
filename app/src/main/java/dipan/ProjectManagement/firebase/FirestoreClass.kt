@@ -238,7 +238,7 @@ class FirestoreClass {
     }
 
     //get all the members details from the assigned list
-    fun getAssignedMemberListDetails(activity:MembersActivity,memberID:ArrayList<String>){
+    fun getAssignedMemberListDetails(activity:Activity,memberID:ArrayList<String>){
         mFireStore.collection(Constants.USERS)
             //get all the matching documents -> whereArray
             .whereIn(Constants.ID,memberID)//check if the id matches the current
@@ -255,11 +255,21 @@ class FirestoreClass {
                     val user = i.toObject(User::class.java)!!
                     memberList.add(user)
                 }
-                activity.setUpMemberListRV(memberList)
+
+                if(activity is MembersActivity){
+                    activity.setUpMemberListRV(memberList)
+                }else if(activity is TaskListActivity){
+                    activity.boardMemberDetailsList(memberList)
+                }
+
             }
             .addOnFailureListener {
                 e->
-                activity.hideProgressDialog()
+                if(activity is MembersActivity){
+                    activity.hideProgressDialog()
+                }else if(activity is TaskListActivity){
+                    activity.hideProgressDialog()
+                }
                 Log.e("FireStoreError", "Error while getting the members list", e)
             }
 
