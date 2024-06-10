@@ -46,13 +46,12 @@ open class CardMemberListItemsAdapter(
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
         val model= list[position]
 
-        if(position == list.size-1){
-            holder.itemBinding.civSelectedMemberImage.setImageResource(R.drawable.ic_add_blue_24dp)
-            holder.itemBinding.civSelectedMemberImage.visibility = android.view.View.VISIBLE
+        if(position == list.size-1){//this is the last item -> empty item -> the + icon
             holder.itemBinding.civSelectedMemberImage.visibility = android.view.View.GONE
+            holder.itemBinding.civAddMember.visibility = android.view.View.VISIBLE
         }else{
-            holder.itemBinding.civSelectedMemberImage.visibility = android.view.View.GONE
             holder.itemBinding.civSelectedMemberImage.visibility = android.view.View.VISIBLE
+            holder.itemBinding.civAddMember.visibility = android.view.View.GONE
         }
 
         holder.bindItem(model)

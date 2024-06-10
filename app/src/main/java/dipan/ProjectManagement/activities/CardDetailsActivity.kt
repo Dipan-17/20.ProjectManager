@@ -78,11 +78,13 @@ class CardDetailsActivity : BaseActivity() {
             labelColorListDialog()
         }
 
-        //member list
+        //select member list
         cardDetailsBinding?.tvSelectMembers?.setOnClickListener {
             membersListDialog()
         }
 
+        //members display
+        setupSelectedMembersList()
     }
 
     //get the intent data
@@ -292,7 +294,8 @@ class CardDetailsActivity : BaseActivity() {
         }
 
         if(selectedMembersList.size>0){
-            selectedMembersList.add(SelectedMembers("",""))//add the last item -> add button
+            selectedMembersList.add(SelectedMembers("",""))//add the last item -> add button -> cause we use the last index item as a + icon
+
             cardDetailsBinding?.tvSelectMembers?.visibility=View.GONE
             cardDetailsBinding?.rvSelectedMembersList?.visibility=View.VISIBLE
 

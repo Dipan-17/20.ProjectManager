@@ -10,10 +10,10 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/civ_selected_member_image"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:src="@drawable/ic_person_placeholder_black"
-        android:visibility="visible"
+        android:visibility="gone"
         app:civ_border_color="@color/primaryTextColor"
         app:civ_border_width="2dp"
         android:layout_marginTop="4dp"
