@@ -135,6 +135,10 @@ class CardDetailsActivity : BaseActivity() {
 
         )
 
+        //we do not want to add "Add card" to database
+        val taskList:ArrayList<Task> = mBoardDetails.taskList
+        taskList.removeAt(taskList.size-1)//remove the last item -> add button
+
         //assign the new card in the position of the old card
         mBoardDetails.taskList[mTaskListPosition].card[mCardListPosition]=card
 
